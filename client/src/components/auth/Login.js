@@ -27,18 +27,18 @@ const Login = (props) => {
 
   let {username, password} = props.state.login
 
-  console.log(props)
   return (
   
-       <div className="container">
-
+       <div className="login-container">
+       <div className="login-form-container">
           <h1>Login</h1>
           <form onSubmit={(e)=> props.handleLoginSubmit(e, username, password, props.history)}>
               Username: <input name="username" type="text" value={username} onChange={props.handleLoginChange} /> <br></br>
             
               Password: <input name="password" type="password" value={password} onChange={props.handleLoginChange} /> <br></br>
-              <input type="submit" value="Registrar" />
+              <input type="submit" value="Login" className="login-input"/>
           </form>
+         </div>
       </div>
 
   )

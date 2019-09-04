@@ -11,6 +11,15 @@ export default class authServices {
   signup = (username, email, password) => this.service.post('signup', {username, email, password})
   login = (username, password) => this.service.post('login', {username, password})
   logout = () => this.service.post('logout')
-  loggedin = () => this.service.get('loggedin')
+
+  loggedin = (tokenFromStorage) => {
+    
+   return this.service.get(`loggedin`, {
+      headers: {
+        Authorization: 'Bearer ' + tokenFromStorage
+      }
+    })
+  }
+
 
 }

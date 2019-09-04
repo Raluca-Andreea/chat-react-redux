@@ -9,6 +9,17 @@ export const SET_USER = 'SET_USER'
 export const SUBMIT_MESSAGE = 'SUBMIT_MESSAGE'
 export const FIND_USER = 'FIND_USER'
 
+export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS'
+export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE'
+
+export const LOGOUT_USER = 'LOGOUT_USER'
+
+export const OPEN_MODAL = 'OPEN_MODAL'
+export const CLOSE_MODAL = 'CLOSE_MODAL'
+
+
+
+
 
 
 

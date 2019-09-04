@@ -29,16 +29,17 @@ const Signup = (props) => {
   console.log(props)
   return (
   
-       <div className="container">
-
+       <div className="signup-container">
+          <div className="signup-form-container">
           <h1>Signup</h1>
           <form onSubmit={(e)=> props.handleSignupSubmit(e, username, email, password, props.history)}>
               Username: <input name="username" type="text" value={username} onChange={props.handleSignupChange} /> <br></br>
               Email: <input name="email" type="email" value={email} onChange={props.handleSignupChange} />
               <br></br>
               Password: <input name="password" type="password" value={password} onChange={props.handleSignupChange} /> <br></br>
-              <input type="submit" value="Registrar" />
+              <input type="submit" value="Signup" className="login-input"/>
           </form>
+          </div>
       </div>
 
   )

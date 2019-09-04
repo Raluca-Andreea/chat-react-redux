@@ -5,8 +5,6 @@ import Form from './Form'
 
 
 const mapStateToProps = (state) => {
-  // console.log("Estoy en el mapStateToProps de Countries")
-  // console.log(state.countries)
   const countries = state.countries.countries
   return {
     countries
@@ -23,7 +21,7 @@ const Countries = (props) => {
       <div className="container">
         <div className="row">
           {props.countries.map((city, idx) => {
-            return <CountryCard key={idx} {...city} />
+            return <CountryCard key={city} {...city} />
           })}
         </div>
       </div>

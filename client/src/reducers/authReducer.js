@@ -1,18 +1,50 @@
-import { HANDLE_FORM_SUBMIT } from '../actions/actionTypes'
+import { LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE, LOGOUT_USER } from '../actions/actionTypes'
+import jwtDecode from 'jwt-decode';
 
 const initialState = {
   loggedInUser: null,
-
+  token: null,
+  statusText: null,
+  isAuthenticated: false,
+  isAuthenticating: false,
 }
+
+
 
 const authReducer = (state=initialState, action) => {
 
   switch (action.type) {
 
-    case HANDLE_FORM_SUBMIT:
+    case LOGIN_USER_SUCCESS:
+  
     return {
       ...state,
-      loggedInUser: action.payload
+      loggedInUser: jwtDecode(action.payload.token).username,
+      token: action.payload.token,
+      statusText: 'You have been successfully logged in.',
+      isAuthenticated: true,
+      isAuthenticating: false,
+    }
+
+    case LOGIN_USER_FAILURE:
+  
+    return {
+      ...state,
+      loggedInUser: null,
+      token: null,
+      statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText}`,
+      isAuthenticated: false,
+      isAuthenticating: false,
+    }
+
+    case LOGOUT_USER: 
+
+    return {
+      loggedInUser: null,
+      token: null,
+      statusText: 'You have been successfully logged out.',
+      isAuthenticated: false,
+      isAuthenticating: false,       
     }
 
     default:

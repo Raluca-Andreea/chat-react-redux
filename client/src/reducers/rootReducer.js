@@ -4,7 +4,7 @@ import GlobalChatReducer from './globalChatReducer'
 import signupReducer from './signupReducer'
 import loginReducer from './loginReducer'
 import authReducer from './authReducer'
-
+import modalReducer from './modalReducer'
 
 
 export default combineReducers ({
@@ -12,5 +12,6 @@ export default combineReducers ({
   globalChat: GlobalChatReducer,
   signup: signupReducer,
   login: loginReducer,
-  auth: authReducer
+  auth: authReducer,
+  modal: modalReducer
 })

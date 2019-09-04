@@ -12,6 +12,16 @@ import {Provider} from 'react-redux'
 // Provider takes store and children as props. Calling configureStore() method from src/store.js creates the redux store, which is passed as props to Provider
 import {store} from './store'
 
+
+import {saveState} from './localStorage'
+import throttle from 'lodash/throttle'
+
+store.subscribe(throttle(() => {
+  saveState({
+    auth: store.getState().auth
+  })
+}, 1000))
+
 ReactDOM.render(
   <Router>
     <Provider store={store}>

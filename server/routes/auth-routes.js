@@ -1,11 +1,17 @@
 const express = require('express');
 const authRoutes = express.Router();
-
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
-
 const User = require('../models/User');
 
+//jwt-token
+const utils = require('../configs/jwt');
+const expressJwt = require('express-jwt');
+
+if (!process.env.JWT_SECRET) {
+    console.error('ERROR!: Please set JWT_SECRET before running the app. \n run: export JWT_SECRET=<some secret string> to set JWTSecret. ')
+    process.exit();
+  }
 
 authRoutes.post('/signup', (req, res, next) => {
 
@@ -27,11 +33,19 @@ authRoutes.post('/signup', (req, res, next) => {
   
           aNewUser.save(err => {
               if (err) { res.status(400).json({ message: 'Saving user to database went wrong.' }); return; }
+        
               // Automatically log in user after sign up  .login() here is actually predefined passport method
               req.login(aNewUser, (err) => {
                   if (err) { res.status(500).json({ message: 'Login after signup went bad.' }); return; }
+                  console.log("llega hasta crear el token")
+
+                  var token = utils.generateToken(aNewUser); //<----- Generate Token
+                  theNewUser = utils.getCleanUser(aNewUser);
+                
                   // Send the user's information to the frontend. We can use also: res.status(200).json(req.user);
-                  res.status(200).json(aNewUser);
+                  res.status(200).json({user: theNewUser, token:token}); // <----- Return both user and token
+                //   res.status(200).json(aNewUser); // <----- Return both user and token
+
               });
           });   
 
@@ -50,7 +64,9 @@ authRoutes.post('/login', (req, res, next) => {
       req.login(theUser, (err) => {
           if (err) { res.status(500).json({ message: 'Session save went bad.' }); return; }
           // We are now logged in (that's why we can also send req.user)
-          res.status(200).json(theUser);
+          var token = utils.generateToken(theUser); //<----- Generate Token
+          theNewUser = utils.getCleanUser(theUser);
+          res.status(200).json({user: theNewUser, token:token});
       });
   })(req, res, next);
 });
@@ -66,12 +82,38 @@ authRoutes.post('/logout', (req, res, next) => {
 
 
 authRoutes.get('/loggedin', (req, res, next) => {
-  // req.isAuthenticated() is defined by passport
-  if (req.isAuthenticated()) {
-      res.status(200).json(req.user);
-      return;
-  }
-  res.status(403).json({ message: 'Unauthorized' });
+ 
+        var token = req.body.token || req.query.token || req.params.token  || req.headers['x-access-token']
+    
+      if (!token) {
+        return res.status(401).json({
+          message: 'Must pass token'
+        });
+      }
+
+  jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+    if (err)
+      throw err;
+      User.findById(user._id, (err, foundUser) => {
+        if (err) { res.status(500).json({ message: 'Something went wrong finding the user' }); return; }
+        user = utils.getCleanUser(foundUser); //dont pass password and stuff
+
+        //note: you can renew token by creating new token(i.e. refresh it) w/ new expiration time at this point, but I'm passing the old token back.
+        // var token = utils.generateToken(user);
+       res.status(200).json({user: user, token:token });
+        
+      })
+      
+  })
+
+  //OLD_VERSION
+
+    // req.isAuthenticated() is defined by passport
+//   if (req.isAuthenticated()) {
+//       res.status(200).json(req.user);
+//       return;
+//   }
+//   res.status(403).json({ message: 'Unauthorized' });
 });
 
 

@@ -13,6 +13,7 @@ const cors = require("cors");
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
+var jwt = require('jsonwebtoken');
 require('./configs/passport'); 
 
 
@@ -44,6 +45,12 @@ app.use(require('node-sass-middleware')({
   dest: path.join(__dirname, 'public'),
   sourceMap: true
 }));
+
+
+
+
+
+
       
 
 //Conf cors
@@ -75,6 +82,40 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+
+
+
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Request-Headers", "*");
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   next();
+// });
+
+app.use(function(req, res, next) {
+  // check header or url parameters or post parameters for token
+
+  var token = req.headers['authorization'];
+  if (!token) return next();
+
+  token = token.replace('Bearer ', '');
+
+
+  jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+    if (err) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please register Log in using a valid email to submit posts'
+      });
+    } else {
+      req.user = user;
+      next();
+    }
+  });
+
+});
 
 
 

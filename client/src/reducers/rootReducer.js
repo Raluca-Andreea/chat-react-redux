@@ -1,11 +1,11 @@
 import {combineReducers} from 'redux'
 import CountriesReducer from './countriesReducer'
 import GlobalChatReducer from './globalChatReducer'
+import privateChatReducer from './privateChatReducer'
 import signupReducer from './signupReducer'
 import loginReducer from './loginReducer'
 import authReducer from './authReducer'
-import modalReducer from './modalReducer'
-
+import allUsersReducer from './allUsersReducer'
 
 export default combineReducers ({
   countries: CountriesReducer,
@@ -13,5 +13,6 @@ export default combineReducers ({
   signup: signupReducer,
   login: loginReducer,
   auth: authReducer,
-  modal: modalReducer
+  allUsers: allUsersReducer,
+  privateChat: privateChatReducer
 })

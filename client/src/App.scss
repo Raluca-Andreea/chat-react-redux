@@ -3,6 +3,8 @@ $background-color: #cccccc;
 $chat-container: 60%;
 $input-background: #e6e6e6;
 
+$connected: ("true": red, "false": blue);
+
 @mixin flex-basic {
   display: flex;
   align-items: center;
@@ -18,6 +20,27 @@ $input-background: #e6e6e6;
     margin: 0 auto;
   }
 }
+
+// @each $name, $size in $connected {
+//   .#{$name} {
+//     background: #{$size};
+//     width: 10px;
+//     height: 10px;
+    
+//   }
+// }
+
+.true {
+  background: green;
+  width: 10px;
+    height: 10px;
+}
+.false {
+  background: red;
+  width: 10px;
+    height: 10px;
+}
+
 body {
   font: 300 .9em "Lato", sans-serif;
 }
@@ -177,7 +200,7 @@ input{
   display: flex;
   justify-content: flex-end;
   background: $background-color;
-  padding: 10px 20px;
+  padding: 20px 20px;
 }
 
 .nav-link {
@@ -237,4 +260,46 @@ input{
 .signup-input{
   background: #575ed8;
   color: white;
+}
+
+
+//PRIVATE-CHAT
+.pr-chat-users{
+ width: 20%;
+ background-image: url('./img/private-chat-back-edit.jpg');
+ position: fixed;
+ top: 0;
+ left:0;
+ height: 100vh;
+}
+.search-bar{
+  width: 80%;
+  margin: 10px auto;
+  mix-blend-mode: color-burn;
+  &::placeholder{
+    font-size: 1.2em;
+  }
+}
+
+.users-list{
+  overflow-y: auto;
+  max-height:80%;
+  margin: 30px auto;
+  z-index:10;
+  padding-left: 30px;
+  mix-blend-mode: color-burn
+}
+
+.user-list-button{
+  border:none;
+  display: block;
+  margin: 10px 0;
+  background: none;
+  font-size: 1.5em;
+  text-align: left;
+ 
+  &:hover{
+    color: rgba(0,0,0, 0.5);
+  }
+
 }

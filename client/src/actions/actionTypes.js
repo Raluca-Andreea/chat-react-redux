@@ -14,8 +14,17 @@ export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE'
 
 export const LOGOUT_USER = 'LOGOUT_USER'
 
-export const OPEN_MODAL = 'OPEN_MODAL'
-export const CLOSE_MODAL = 'CLOSE_MODAL'
+//SEARCH
+export const HANDLE_SEARCH = 'HANDLE_SEARCH'
+export const FILTER_USERS = 'FILTER_USERS'
+
+//PRIVATE-CHAT
+export const GET_ALL_USERS = 'GET_ALL_USERS'
+export const SET_PRIVATE_ROOM = 'SET_PRIVATE_ROOM'
+
+
+
+
 
 
 

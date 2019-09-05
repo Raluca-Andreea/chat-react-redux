@@ -9,7 +9,6 @@ const persistedState = loadState()
 export const store = createStore(
   RootReducer,
   persistedState,
-  applyMiddleware(thunk),
-  
+  applyMiddleware(thunk),  
   window.REDUX_DEVTOOLS_EXTENSION && window.REDUX_DEVTOOLS_EXTENSION()
 )

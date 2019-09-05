@@ -18,8 +18,10 @@ import throttle from 'lodash/throttle'
 
 store.subscribe(throttle(() => {
   saveState({
-    auth: store.getState().auth
+    auth: store.getState().auth,
+    allUsers: store.getState().allUsers
   })
+  
 }, 1000))
 
 ReactDOM.render(

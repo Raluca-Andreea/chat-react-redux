@@ -40,7 +40,6 @@ constructor() {
 
   render() {
 
-    console.log(this.props)
     return (
       <div  id="mario-chat">    
         <div id="chat-window">

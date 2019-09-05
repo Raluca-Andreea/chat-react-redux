@@ -47,14 +47,10 @@ app.use(require('node-sass-middleware')({
 }));
 
 
-
-
-
-
-      
-
 //Conf cors
-const whiteList = ["http://localhost:3000"]
+// const whiteList = ["http://localhost:3000"]
+const whiteList = ["http://192.168.100.192:3000"]
+
 const corsOptions = {
   origin: (origin, cb) => {
     const originIsWhitelisted = whiteList.includes(origin);
@@ -83,16 +79,6 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
-
-
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Request-Headers", "*");
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
 
 app.use(function(req, res, next) {
   // check header or url parameters or post parameters for token
@@ -129,7 +115,8 @@ app.use('/api', index);
 const authRoutes = require('./routes/auth-routes');
 app.use('/api', authRoutes);
 
-
+const privateChatRoutes = require('./routes/privateChat-routes');
+app.use('/api', privateChatRoutes);
 
 app.use((req, res) => { res.sendFile(`${__dirname}/public/index.html`); })
 

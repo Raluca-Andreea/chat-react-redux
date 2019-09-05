@@ -1,9 +1,11 @@
 import { HANDLE_CHANGE, HANDLE_SUBMIT, SET_USER, SUBMIT_MESSAGE, HANDLE_SIGNUP_CHANGE, HANDLE_LOGIN_CHANGE, 
-  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER } from './actionTypes'
+  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, SET_PRIVATE_ROOM } from './actionTypes'
 // import jwtDecode from 'jwt-decode'
 import Service from '../services/auth-services';
-let authService = new Service()
+import prService from '../services/private-services';
 
+let authService = new Service()
+let privateChatService = new prService()
 
 //FORMS - HANDLE CHANGE
 export const handleSignupChange = (e) => (
@@ -46,6 +48,8 @@ export const loginUserFailure = (error) => {
   }
 }
 
+//LOGOUT
+
 export const logout = () => {
   localStorage.removeItem('token');
   return {
@@ -54,9 +58,7 @@ export const logout = () => {
 }
 
 
-
 // FORMS - HANDLE SUBMIT
-
 
 export const handleSignupSubmit = (e, username, email, password, history ) => {
 
@@ -122,9 +124,7 @@ export const logoutUser = (redirect='/') => {
 }
 
 
-
-
-
+//HANDLE_CHANGE_FORMS
 
 
 export const handleChange = (e) => (
@@ -143,8 +143,6 @@ export const handleSubmit = (city) => (
 )
 
 
-
-
 // SET CURRENT USER GLOBAL CHAT
 
 export const setUser = (user) => {
@@ -158,7 +156,7 @@ export const setUser = (user) => {
 } 
 
 
-//Messages
+//MESSAGES
 
 const submitTheMessage = (obj) => (
   {
@@ -187,6 +185,54 @@ export const addMessage = (obj) => {
 
 
 
+//PRIVATE_CHAT
+
+const getUsers = (users) => (
+  {
+    type: GET_ALL_USERS,
+    payload: users,
+  }
+)
+
+export const getAllUsers = (usr, socket) => {
+
+  return (dispatch) => {
+    if(usr) {
+      socket.connectUser(usr)
+        privateChatService.getAllUsers() 
+        .then(users => {
+          dispatch(getUsers(users))
+        })        
+    }
+  }
+}
+
+
+//SEARCH_BAR_USERS
+
+export const handleSearch = (e) => {
+
+  return dispatch => {
+    dispatch(handle(e.target.name, e.target.value))
+    dispatch(filterUsers(e.target.name, e.target.value))
+  }
+  
+}
+
+const handle = (name, value) => (
+  {
+    type: HANDLE_SEARCH,
+    name: name,
+    value: value,
+  }
+)
+const filterUsers = (name, value) => (
+  {
+    type: FILTER_USERS,
+    name: name,
+    value: value,
+  }
+)
 
 
 

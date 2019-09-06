@@ -9,7 +9,7 @@ const initialState = {
 const privateChatReducer = (state=initialState, action) => {
 
   switch (action.type) {
-
+    
   
     
 

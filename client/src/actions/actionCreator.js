@@ -1,5 +1,5 @@
 import { HANDLE_CHANGE, HANDLE_SUBMIT, SET_USER, SUBMIT_MESSAGE, HANDLE_SIGNUP_CHANGE, HANDLE_LOGIN_CHANGE, 
-  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, SET_PRIVATE_ROOM } from './actionTypes'
+  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, SET_PRIVATE_ROOM, REMOVE_USER, CONNECT_USER } from './actionTypes'
 // import jwtDecode from 'jwt-decode'
 import Service from '../services/auth-services';
 import prService from '../services/private-services';
@@ -193,17 +193,70 @@ const getUsers = (users) => (
     payload: users,
   }
 )
+const disconnectUser = (user) => (
+  {
+    type: REMOVE_USER,
+    payload: user,
+  }
+)
+
+// const addConnectedUser = (user) => (
+//   {
+//     type: CONNECT_USER,
+//     payload: user,
+//   }
+// )
+
+// export const connectUser = (usr, socket) => {
+
+//   return (dispatch) => {
+//     if(usr) {
+//       socket.connectUser(usr)
+//       dispatch(addConnectedUser(usr))              
+//     }
+//   }
+// }
+
+// export const getAllUsers = () => {
+
+//   return (dispatch) => {
+   
+//       privateChatService.getAllUsers() 
+//       .then(users => {
+//         dispatch(getUsers(users))
+//       })   
+//       .catch(err => console.log(err))     
+    
+// }
+// }
 
 export const getAllUsers = (usr, socket) => {
 
   return (dispatch) => {
     if(usr) {
       socket.connectUser(usr)
-        privateChatService.getAllUsers() 
-        .then(users => {
-          dispatch(getUsers(users))
-        })        
+      privateChatService.getAllUsers() 
+      .then(users => {
+        dispatch(getUsers(users))
+      })   
+      .catch(err => console.log(err))     
     }
+}
+}
+
+export const removeUser = (user) => {
+  return (dispatch) => {
+    dispatch(disconnectUser(user))
+  }
+}
+
+export const refreshUsers = () => {
+  return (dispatch) => {
+    privateChatService.getAllUsers() 
+    .then(users => {
+      dispatch(getUsers(users))
+    })   
+    .catch(err => console.log(err))  
   }
 }
 

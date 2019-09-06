@@ -21,6 +21,8 @@ export const FILTER_USERS = 'FILTER_USERS'
 //PRIVATE-CHAT
 export const GET_ALL_USERS = 'GET_ALL_USERS'
 export const SET_PRIVATE_ROOM = 'SET_PRIVATE_ROOM'
+export const REMOVE_USER = 'REMOVE_USER'
+export const CONNECT_USER = 'CONNECT_USER'
 
 
 

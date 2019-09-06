@@ -15,11 +15,20 @@ module.exports = (io) =>{
     })
 
     socket.on("connectUser", (user)=> {
-      console.log(user)
+
       User.findOneAndUpdate({username: user.user},{ $set: { connected: true }}, {new: true})
       .then(user => {
+        console.log("SE HA ACTUALIZADO EL USER" + user)
+        io.emit("connectUser", user)
+      })
+    })
+
+    socket.on("disconnectUser", (user)=> {
+      console.log(user)
+      User.findOneAndUpdate({username: user.user},{ $set: { connected: false }}, {new: true})
+      .then(user => {
         console.log(user)
-        // io.emit("connectUser", user)
+        io.emit("disconnectUser", user)
       })
     })
 

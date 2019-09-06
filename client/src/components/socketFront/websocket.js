@@ -12,6 +12,9 @@ export default class SocketConnection{
   connectUser = (user) => {
       this.socket.emit("connectUser", {user})
   }
+  disconnectUser = (user) => {
+    this.socket.emit("disconnectUser", {user})
+  }
   
 }
 

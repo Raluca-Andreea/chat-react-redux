@@ -1,4 +1,4 @@
-import { GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS} from '../actions/actionTypes'
+import { GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER } from '../actions/actionTypes'
 
 
 const initialState = {
@@ -31,6 +31,20 @@ const allUsersReducer = (state=initialState, action) => {
     return {
       ...state,
       users: copy
+    }
+
+    case REMOVE_USER:
+ 
+    let cnUsr = [] 
+    state.users.forEach(usr => {
+      if(usr.username.toLowerCase() !== action.payload.username.toLowerCase()) {
+       cnUsr.push(usr)
+      }
+    })
+
+    return {
+      ...state,
+      users: cnUsr
     }
     
 

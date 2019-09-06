@@ -3,6 +3,7 @@ import SearchBar from './SearchBar';
 import UserList from './UserList'
 import {Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
+import SocketConnection from  "../socketFront/websocket"
 
 const mapStateToProps = (state) => {
   return {
@@ -11,6 +12,15 @@ const mapStateToProps = (state) => {
 }
 
 class PrivateChat extends Component {
+  constructor() {
+    super()
+    this.socket = new SocketConnection()
+    }
+
+  componentWillUnmount() {
+    this.socket.disconnectUser(this.props.loggedInUser)
+  }
+
   render() {
     if(this.props.loggedInUser) {
       return (

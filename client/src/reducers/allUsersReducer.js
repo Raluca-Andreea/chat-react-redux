@@ -25,16 +25,15 @@ const allUsersReducer = (state=initialState, action) => {
     }
 
     case FILTER_USERS:
-
     let copy = [...state.usersCopy]
     copy = copy.filter(user => user.username.toLowerCase().includes(action.value.toLowerCase()))
+
     return {
       ...state,
       users: copy
     }
 
     case REMOVE_USER:
- 
     let cnUsr = [] 
     state.users.forEach(usr => {
       if(usr.username.toLowerCase() !== action.payload.username.toLowerCase()) {

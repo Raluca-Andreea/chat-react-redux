@@ -15,6 +15,9 @@ export default class SocketConnection{
   disconnectUser = (user) => {
     this.socket.emit("disconnectUser", {user})
   }
+  joinRoom = (userId, loggedInUser) => {
+    this.socket.emit('join', {userId, loggedInUser})
+  }
   
 }
 

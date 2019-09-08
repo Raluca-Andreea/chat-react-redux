@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import SearchBar from './SearchBar';
 import UserList from './UserList'
+import AllTabs from './AllTabs'
 import {Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
 import SocketConnection from  "../socketFront/websocket"
+
 
 const mapStateToProps = (state) => {
   return {
@@ -28,8 +30,9 @@ class PrivateChat extends Component {
           <div className="pr-chat-users">
             <SearchBar />
           <h2>Users</h2>
-            <UserList/>        
+            <UserList/>   
           </div>
+            <AllTabs />      
         </div>
       )
     } else {

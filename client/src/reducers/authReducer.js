@@ -1,4 +1,4 @@
-import { LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE, LOGOUT_USER } from '../actions/actionTypes'
+import { LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE, LOGOUT_USER, } from '../actions/actionTypes'
 import jwtDecode from 'jwt-decode';
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
 
 
 
-const authReducer = (state=initialState, action) => {
+const completAuthReducer = (state=initialState, action) => {
 
   switch (action.type) {
 
@@ -27,12 +27,11 @@ const authReducer = (state=initialState, action) => {
     }
 
     case LOGIN_USER_FAILURE:
-  
     return {
       ...state,
       loggedInUser: null,
       token: null,
-      statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText}`,
+      statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText.err.response.data.message}`,
       isAuthenticated: false,
       isAuthenticating: false,
     }
@@ -53,4 +52,4 @@ const authReducer = (state=initialState, action) => {
 
 }
 
-export default authReducer
+export default completAuthReducer

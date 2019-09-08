@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
-import { connectUser, removeUser, getAllUsers, refreshUsers } from '../actions/actionCreator'
+import { removeUser, getAllUsers, refreshUsers } from '../actions/actionCreator'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import SocketConnection from  "./socketFront/websocket"
@@ -16,7 +16,6 @@ const mapDispatchToProps = dispatch => {
 
   return bindActionCreators(
     {
-      // connectUser,
       removeUser,
       getAllUsers,
       refreshUsers
@@ -29,24 +28,10 @@ const mapDispatchToProps = dispatch => {
 class Home extends Component {
   constructor() {
     super()
-    this.socket = new SocketConnection()
-
-      this.socket.socket.on("connectUser", (user) => {   
-        console.log("connected from HOME")  
-        console.log(user)
-        this.props.refreshUsers()
-
-      })
-
-      this.socket.socket.on("disconnectUser", (user) => { 
-        console.log("disconnected from HOME") 
-        console.log(user)
-        this.props.removeUser(user)
-    })
-    
+    this.socket = new SocketConnection()    
   }
+  
   render() {
-console.log("sunt renderul din HOME")
     return (
       <div> 
       <div className="home">

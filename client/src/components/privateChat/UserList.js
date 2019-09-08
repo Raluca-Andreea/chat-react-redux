@@ -2,9 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import SocketConnection from  "../socketFront/websocket"
-import { getAllUsers } from '../../actions/actionCreator'
-
-// let socket =  new SocketConnection() 
+import { getAllUsers, refreshUsers, removeUser, joinRoom } from '../../actions/actionCreator'
 
 const mapStateToProps = (state) => { 
   return {
@@ -17,7 +15,10 @@ const mapDispatchToProps = (dispatch)=> {
 
   return bindActionCreators(
     {
-      getAllUsers
+      getAllUsers,
+      refreshUsers,
+      removeUser,
+      joinRoom
     },
     dispatch
   );
@@ -26,28 +27,46 @@ const mapDispatchToProps = (dispatch)=> {
 
 class UserList extends Component {
 
-  
+    constructor() {
+    super()
+    this.socket = new SocketConnection()
 
+      this.socket.socket.on("connectUser", (user) => {   
+        console.log("connected from HOME")  
+        console.log(user)
+        this.props.refreshUsers()
+      })
 
-    componentDidMount() {
-      // this.props.getAllUsers()
-  console.log("sunt componentDidMount din USERLIST")
+      this.socket.socket.on("disconnectUser", (user) => { 
+        if(user) {
+          console.log("disconnected from HOME") 
+          console.log(user)
+          this.props.removeUser(user)
+        }     
+      })
 
-    }
-
+       this.socket.socket.on("join", (userId) => {   
+        console.log("joined room nr" + userId)  
+      })
+    
+  }
 
  render() {
-  console.log("sunt renderul din USERLIST")
   if(this.props.allUsers) {
     return (
      
-      <div className="users-list">      
-        {this.props.allUsers.map(user => {
-
-          console.log(user.connected.toString())
-          return <div><button key={user.username} className="user-list-button">{user.username}</button><div id={user.username}  className="connect"></div><hr></hr></div>
-        })}        
-      </div>  
+      < >    
+          <div className="users-list">  
+              {this.props.allUsers.map(user => { 
+                 return user.username === this.props.loggedInUser 
+                 ?
+                 <li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><p>You are now online</p></li> 
+                 :
+                 <div><button onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser)} key={user.username} className="user-list-button">{user.username}</button><hr></hr></div>
+              })}  
+         </div>
+          
+      </>  
     )
   } else {
     return (

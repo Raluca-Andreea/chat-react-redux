@@ -16,22 +16,22 @@ if (!process.env.JWT_SECRET) {
 authRoutes.post('/signup', (req, res, next) => {
 
   const { username, email, password } = req.body
-  if (!email || !password) { res.status(400).json({ message: 'Provide email and password' }); return; }
+  if (!email || !password || !username) { res.status(400).json({ message: 'Provide email, password and username' }); return; }
   if (password.length < 5) {
       res.status(400).json({ message: 'Please make your password at least 6 characters long for security purposes.' });
       return;
   }
 
-  User.findOne({ email }, (err, foundUser) => {
-      if (err) { res.status(500).json({ message: "email check went bad." }); return; }
-      if (foundUser) { res.status(400).json({ message: 'email taken. Choose another one.' }); return; }
-
-          const salt = bcrypt.genSaltSync(10);
-          const hashPass = bcrypt.hashSync(password, salt);
-          
-          const aNewUser = new User({ username, email, password: hashPass });
-  
-          aNewUser.save(err => {
+  User.findOne({ username }, (err, foundUser) => {
+    if (err) { res.status(500).json({ message: "email check went bad." }); return; }
+    if (foundUser) { res.status(400).json({ message: 'username taken. Choose another one.' }); return; }
+    
+    const salt = bcrypt.genSaltSync(10);
+    const hashPass = bcrypt.hashSync(password, salt);
+ 
+    const aNewUser = new User({username, email, password: hashPass });
+    
+        aNewUser.save(err => {
               if (err) { res.status(400).json({ message: 'Saving user to database went wrong.' }); return; }
         
               // Automatically log in user after sign up  .login() here is actually predefined passport method

@@ -79,8 +79,13 @@ export const handleSignupSubmit = (e, username, email, password, history ) => {
         }));
     }    
     })
-    .catch(error => {
-      dispatch(loginUserFailure(error))
+    .catch(err => {
+      dispatch(loginUserFailure({
+        response: {
+            status: 403,
+            statusText: {err},
+        }
+    }))
     })
   } 
 }
@@ -102,12 +107,17 @@ export const handleLoginSubmit = (e, username, password, history) => {
         dispatch(loginUserFailure({
             response: {
                 status: 403,
-                statusText: 'Invalid token'
+                statusText: 'Invalid token',
             }
         }));
     }    
     })
-    .catch(err => console.log(err))
+    .catch(err => dispatch(loginUserFailure({
+      response: {
+          status: 403,
+          statusText: {err},
+      }
+  })))
   } 
 }
 
@@ -200,36 +210,6 @@ const disconnectUser = (user) => (
   }
 )
 
-// const addConnectedUser = (user) => (
-//   {
-//     type: CONNECT_USER,
-//     payload: user,
-//   }
-// )
-
-// export const connectUser = (usr, socket) => {
-
-//   return (dispatch) => {
-//     if(usr) {
-//       socket.connectUser(usr)
-//       dispatch(addConnectedUser(usr))              
-//     }
-//   }
-// }
-
-// export const getAllUsers = () => {
-
-//   return (dispatch) => {
-   
-//       privateChatService.getAllUsers() 
-//       .then(users => {
-//         dispatch(getUsers(users))
-//       })   
-//       .catch(err => console.log(err))     
-    
-// }
-// }
-
 export const getAllUsers = (usr, socket) => {
 
   return (dispatch) => {
@@ -257,6 +237,12 @@ export const refreshUsers = () => {
       dispatch(getUsers(users))
     })   
     .catch(err => console.log(err))  
+  }
+}
+
+export const joinRoom = (userId, socket, loggedInUser) => {
+  return dispatch => {
+    socket.joinRoom(userId, loggedInUser)
   }
 }
 

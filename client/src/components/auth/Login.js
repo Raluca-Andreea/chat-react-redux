@@ -24,7 +24,7 @@ const mapDispatchToProps = dispatch => {
 
 
 const Login = (props) => {
-
+console.log(props.state.auth)
   let {username, password} = props.state.login
 
   return (
@@ -38,6 +38,7 @@ const Login = (props) => {
               Password: <input name="password" type="password" value={password} onChange={props.handleLoginChange} /> <br></br>
               <input type="submit" value="Login" className="login-input"/>
           </form>
+         {props.state.auth.statusText.includes("Error") && <div className="error-auth" >{props.state.auth.statusText}</div>}
          </div>
       </div>
 

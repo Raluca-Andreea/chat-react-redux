@@ -1,5 +1,7 @@
-
 const User = require("../models/User")
+const Room = require("../models/Room")
+const mongoose = require('mongoose');
+
 
 module.exports = (io) =>{
   console.log("Hoy conexion con sockets")
@@ -31,6 +33,26 @@ module.exports = (io) =>{
         io.emit("disconnectUser", user)
       })
     })
+
+    socket.on('join', (users) => {
+
+      socket.join(users.userId)
+
+      User.findOne({username: users.loggedInUser})
+      .then(user => {
+
+        Room.create({
+          sender: new mongoose.Types.ObjectId(user._id),
+          reciever: new mongoose.Types.ObjectId(users.userId)
+        })
+        .then(room => {
+          console.log(room)
+        })
+      })
+
+      io.emit("join", users.userId)
+    })
+
 
   })
 }

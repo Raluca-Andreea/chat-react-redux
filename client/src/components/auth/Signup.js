@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 
 const mapStateToProps = (state) => {
- 
+
   return {
     state
   };
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => {
 const Signup = (props) => {
 
   let {username, email, password} = props.state.signup
-  console.log(props)
+
   return (
   
        <div className="signup-container">
@@ -39,6 +39,7 @@ const Signup = (props) => {
               Password: <input name="password" type="password" value={password} onChange={props.handleSignupChange} /> <br></br>
               <input type="submit" value="Signup" className="login-input"/>
           </form>
+          {props.state.auth.statusText.includes("Error") && <div className="error-auth" >{props.state.auth.statusText}</div>}
           </div>
       </div>
 

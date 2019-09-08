@@ -35,11 +35,6 @@ $connected: ("true": red, "false": blue);
   width: 10px;
     height: 10px;
 }
-.false {
-  background: red;
-  width: 10px;
-    height: 10px;
-}
 
 body {
   font: 300 .9em "Lato", sans-serif;
@@ -262,6 +257,16 @@ input{
   color: white;
 }
 
+.error-auth {
+
+  background: #e33d27;
+  margin-top: 10px;
+  padding: 10px 0;
+  // color: white;
+  // width: 40%;
+
+}
+
 
 //PRIVATE-CHAT
 .pr-chat-users{
@@ -302,4 +307,21 @@ input{
     color: rgba(0,0,0, 0.5);
   }
 
+}
+
+//PRIVATE-CHAT TABS
+
+.all-tabs{
+  background: red;
+}
+
+.current-user-private-chat{ 
+  font-size: 1.5em;
+  color: #575ed8;
+
+}
+.current-user-private-chat-li{
+  list-style-type: none;
+  text-align: left;
+  margin-bottom: 20px;
 }

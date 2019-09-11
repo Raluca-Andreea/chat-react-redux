@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
-import {handleMessageInputChange, submitPrivateMessage, addPrivateMessage, getAllMessages } from '../../actions/actionCreator'
+import {handleMessageInputChange, submitPrivateMessage, getAllMessages } from '../../actions/actionCreator'
 import SocketConnection from  "../socketFront/websocket"
 
 
@@ -19,7 +19,6 @@ const mapDispatchToProps = (dispatch)=> {
     {
       handleMessageInputChange,
       submitPrivateMessage,
-      // addPrivateMessage,
       getAllMessages
     },
     dispatch
@@ -41,17 +40,18 @@ class ChatRoom extends Component {
     this.props.getAllMessages(this.props.privateChat.currentRoom)
   }
   render() {
-console.log(this.props.privateChat.currentRoom, this.props.loggedInUser_ID)
-   if(this.props.privateChat.messages) {
+    const room = this.props
+console.log(this.props.privateChat)
+   if(this.props.privateChat.messages.length !== 0) {
+    
      return (
     
        <div  className="private-chat">    
          <div className="private-chat-window">
              <div className="private-chat-output">
-                {this.props.privateChat.messages.length >= 1 ? 
+                {this.props.privateChat.messages.length !== 0 ? 
                    <ul>
                    {this.props.privateChat.messages.map((msg, idx) => {
-                     console.log(msg)
                    return msg.user.username === this.props.loggedInUser ?
  
                      <li key={msg.createdAt} className="private-chat-sender-msg"><span className="sender-msg">{msg.message}</span></li>
@@ -70,7 +70,7 @@ console.log(this.props.privateChat.currentRoom, this.props.loggedInUser_ID)
  
                <input id="message" name="message" type="text" placeholder="Message" value={this.props.privateChat.message}  onChange={this.props.handleMessageInputChange} />
            </form>
-           {/* <button id="send"  className="custom-btn" onClick={ () =>this.props.submitMessage(this.props.state.globalChat.message, this.socket, this.props.state.globalChat.currentUser)}>>Send</button> */}
+          
            </div>
         </div>
 
@@ -78,11 +78,23 @@ console.log(this.props.privateChat.currentRoom, this.props.loggedInUser_ID)
 
    } else {
      return (
-    
+       <>
        <p>No chat started..</p>
+       <div className="input-private-messages">  
+               <form onSubmit={(e) => this.props.submitPrivateMessage(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID,this.props.loggedInUser, this.props.privateChat.currentRoom, e)}>   
+ 
+               <input id="message" name="message" type="text" placeholder="Message" value={this.props.privateChat.message}  onChange={this.props.handleMessageInputChange} />
+           </form>
+           {/* <button id="send"  className="custom-btn" onClick={ () =>this.props.submitMessage(this.props.state.globalChat.message, this.socket, this.props.state.globalChat.currentUser)}>>Send</button> */}
+       </div>
+       </>
+    
       
      )
    }
+  //  return (
+  //    <p>Bla</p>
+  //  )
   }
 }
 

@@ -59,6 +59,7 @@ const privateChatReducer = (state=initialState, action) => {
   //  }
 
    case GET_MESSAGES:
+   console.log(action.room)
    return {
      ...state,
      messages: action.room.messages

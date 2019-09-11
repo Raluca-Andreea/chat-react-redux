@@ -29,7 +29,7 @@ privateChatRoutes.get('/allUsers', (req, res, next) => {
 
 
 privateChatRoutes.get('/allMessages', (req, res) => {
-
+console.log(req.query.id)
   Room.findById(req.query.id)
   .populate('sender')
   .populate('reciever') 
@@ -38,6 +38,7 @@ privateChatRoutes.get('/allMessages', (req, res) => {
     populate: { path: 'user' }
 }) 
   .then(room => {
+    console.log(room)
     res.status(200).json(room)
   })
   .catch(err => res.status(401).json(err))

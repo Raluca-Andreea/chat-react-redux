@@ -105,7 +105,7 @@ privateChatRoutes.post('/createRoom', (req, res) => {
 })
 
 privateChatRoutes.post('/addMessage', (req, res) => {
-  
+
         Message.create({
         message: req.body.message,
         user: new mongoose.Types.ObjectId(req.body.loggedInUser_id)
@@ -115,10 +115,14 @@ privateChatRoutes.post('/addMessage', (req, res) => {
         Message.findById(msg._id)
         .populate('user')
         .then(msg => {
+          
                 Room.findByIdAndUpdate(req.body.room_id, {$push: {messages: msg._id}}, {new:true})
-                .populate('messages')
+                .populate({
+                  path: 'messages',
+                  populate: { path: 'user' },
+              })
                 .then(room => {  
-                  console.log(room) 
+                  
                      res.status(200).json({room, msg})                         
                 })
                 .catch(err => console.log("Error while updating the room", err))

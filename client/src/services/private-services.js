@@ -17,7 +17,7 @@ export default class prServices {
   getAllRooms = (user_id) => this.service.get('allRooms', { params: {id: user_id}})
   createRoom = (userId, loggedInUser) => this.service.post('createRoom', {userId, loggedInUser})
 
-  createMessage = (message, loggedInUser_id, room_id)  => this.service.post('addMessage', {message, loggedInUser_id, room_id})
+  createMessage = (message, loggedInUser_id, loggedInUser, room_id)  => this.service.post('addMessage', {message, loggedInUser_id,loggedInUser, room_id})
 
  
 }

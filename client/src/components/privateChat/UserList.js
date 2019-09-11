@@ -65,7 +65,7 @@ class UserList extends Component {
   }
 
  render() {
-console.log(this.props.privateChat)
+
   if(this.props.allUsers) {
     return (
      
@@ -102,22 +102,23 @@ console.log(this.props.privateChat)
              }
              <>
              
-              {/* {this.props.privateChat.rooms.data.privateChats.length >= 1 ?  */}
+              {this.props.privateChat.rooms.length >= 1 ? 
                 <>    
                 
-                {/* {this.props.privateChat.rooms.map(room => {
-                      console.log(room)
-                  if(room._id === this.props.privateChat.currentRoom && (this.props.loggedInUser === room.sender.username || this.props.privateChat.tabValue === room.reciever.username)) {
+                {this.props.privateChat.rooms.map(room => {
+            
+                  if(room._id === this.props.privateChat.currentRoom && 
+                    (this.props.loggedInUser === room.sender.username || this.props.loggedInUser === room.reciever.username ) ||(this.props.privateChat.tabValue === room.reciever.username || this.props.privateChat.tabValue === room.sender.username)) {
                     // return room.message ? <ChatRoom {...room}/> : <p>Start a conversation with {room.reciever.username}</p>
                     return <ChatRoom {...room}/> 
                   }
 
-                  if(room._id === this.props.privateChat.currentRoom ) {
-                    // return room.message ? <ChatRoom {...room}/> : <p>Start a conversation with {room.reciever.username}</p>
-                    return <ChatRoom {...room}/> 
-                  }
+                  // if(room._id === this.props.privateChat.currentRoom ) {
+                  //   // return room.message ? <ChatRoom {...room}/> : <p>Start a conversation with {room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username}</p>
+                  //   return <ChatRoom {...room}/> 
+                  // }
 
-                })}               */}
+                })}              
                 </>
                 :
                 <div>Begin chat</div>                

@@ -18,8 +18,8 @@ export default class SocketConnection{
   joinRoom = (room_id) => {
     this.socket.emit('join', {room_id})
   }
-  sendPrivateMsg = (message, room_id)    => {
-    this.socket.emit('privateMsg', {message, room_id})
+  sendPrivateMsg = (room_id)    => {
+    this.socket.emit('privateMsg', {room_id})
   }
   
 }

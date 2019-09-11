@@ -32,7 +32,7 @@ class ChatRoom extends Component {
     super()
     this.socket = new SocketConnection()
     this.socket.socket.on("privateMsg_update", (room_id) => {
-      console.log("imi trimite iar tot")
+      console.log("imi trimite iar tot din camera " + room_id)
          this.props.getAllMessages(room_id)
     })
 
@@ -41,7 +41,7 @@ class ChatRoom extends Component {
     this.props.getAllMessages(this.props.privateChat.currentRoom)
   }
   render() {
-console.log(this.props.privateChat.currentRoom)
+console.log(this.props.privateChat.currentRoom, this.props.loggedInUser_ID)
    if(this.props.privateChat.messages) {
      return (
     
@@ -51,7 +51,7 @@ console.log(this.props.privateChat.currentRoom)
                 {this.props.privateChat.messages.length >= 1 ? 
                    <ul>
                    {this.props.privateChat.messages.map((msg, idx) => {
-                    //  console.log(msg)
+                     console.log(msg)
                    return msg.user.username === this.props.loggedInUser ?
  
                      <li key={msg.createdAt} className="private-chat-sender-msg"><span className="sender-msg">{msg.message}</span></li>
@@ -66,7 +66,7 @@ console.log(this.props.privateChat.currentRoom)
               <div id="feedback"></div>
          </div>
           <div className="input-private-messages">  
-               <form onSubmit={(e) => this.props.submitPrivateMessage(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID, this.props.privateChat.currentRoom, e)}>   
+               <form onSubmit={(e) => this.props.submitPrivateMessage(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID,this.props.loggedInUser, this.props.privateChat.currentRoom, e)}>   
  
                <input id="message" name="message" type="text" placeholder="Message" value={this.props.privateChat.message}  onChange={this.props.handleMessageInputChange} />
            </form>

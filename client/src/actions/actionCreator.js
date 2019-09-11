@@ -308,15 +308,15 @@ export const handleMessageInputChange = (e) => (
 )
 
 
-export const submitPrivateMessage = (message, socket, loggedInUser_id, room_id, e) => {
+export const submitPrivateMessage = (message, socket, loggedInUser_id, loggedInUser, room_id, e) => {
   e.preventDefault()
   return (dispatch) => {
- console.log("aici intra....bla")
-    privateChatService.createMessage(message, loggedInUser_id, room_id) 
+//  console.log(message, loggedInUser_id, loggedInUser, room_id)
+    privateChatService.createMessage(message, loggedInUser_id, loggedInUser, room_id) 
     .then(res => {
       console.log(res.data)
       // dispatch(getRooms(rooms))
-      socket.sendPrivateMsg(res.data.msg.message, res.data.room._id)   
+      socket.sendPrivateMsg(res.data.room._id)   
       // privateChatService.getPrivateChat(res.data.room._id) 
       // .then(room => {
       //   dispatch(getMessages(room))
@@ -350,7 +350,8 @@ export const getAllMessages = (room_id) => {
   return dispatch => {
     privateChatService.getPrivateChat(room_id) 
     .then(room => {
-      dispatch(getMessages(room))
+      console.log(room.data)
+      dispatch(getMessages(room.data))
     })
   }
 }

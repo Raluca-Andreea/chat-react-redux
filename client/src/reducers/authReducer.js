@@ -18,7 +18,7 @@ const completAuthReducer = (state=initialState, action) => {
     case LOGIN_USER_SUCCESS:
 
       console.log(jwtDecode(action.payload.token)._id)
-      console.log(action.payload.data)
+      console.log(action.payload.data.user._id)
 
     return {
       ...state,

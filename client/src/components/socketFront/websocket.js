@@ -15,8 +15,11 @@ export default class SocketConnection{
   disconnectUser = (user) => {
     this.socket.emit("disconnectUser", {user})
   }
-  joinRoom = (userId, loggedInUser) => {
-    this.socket.emit('join', {userId, loggedInUser})
+  joinRoom = (room_id) => {
+    this.socket.emit('join', {room_id})
+  }
+  sendPrivateMsg = (message, room_id)    => {
+    this.socket.emit('privateMsg', {message, room_id})
   }
   
 }

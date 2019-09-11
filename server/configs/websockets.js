@@ -1,4 +1,5 @@
 const User = require("../models/User")
+const Message = require("../models/Message")
 const Room = require("../models/Room")
 const mongoose = require('mongoose');
 
@@ -34,24 +35,17 @@ module.exports = (io) =>{
       })
     })
 
-    socket.on('join', (users) => {
-
-      socket.join(users.userId)
-
-      User.findOne({username: users.loggedInUser})
-      .then(user => {
-
-        Room.create({
-          sender: new mongoose.Types.ObjectId(user._id),
-          reciever: new mongoose.Types.ObjectId(users.userId)
-        })
-        .then(room => {
-          console.log(room)
-        })
-      })
-
-      io.emit("join", users.userId)
+    socket.on('join', (obj) => {   
+      socket.join(obj.room_id)  
+      io.in(obj.room_id).emit('join_update', obj.room_id)
     })
+    
+    socket.on('privateMsg', (obj) => {
+      socket.join(obj.room_id)
+      io.in(obj.room_id).emit('privateMsg_update', obj.room_id)
+    })
+
+    
 
 
   })

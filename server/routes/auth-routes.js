@@ -28,26 +28,42 @@ authRoutes.post('/signup', (req, res, next) => {
     
     const salt = bcrypt.genSaltSync(10);
     const hashPass = bcrypt.hashSync(password, salt);
- 
+
     const aNewUser = new User({username, email, password: hashPass });
-    
-        aNewUser.save(err => {
-              if (err) { res.status(400).json({ message: 'Saving user to database went wrong.' }); return; }
+    var token = utils.generateToken(aNewUser); //<----- Generate Token
+
+      User.create({username: aNewUser.username, email: aNewUser.email, password: aNewUser.password, token: token})
+      .then((newUser) => {
+
+        req.login(newUser, (err) => {
+              if (err) { res.status(500).json({ message: 'Login after signup went bad.' }); return; }
+      
+              theNewUser = utils.getCleanUser(newUser);
+              res.status(200).json({user: theNewUser, token: newUser.token}); // <----- Return both user and token
+          });
         
+      }).catch(err => {
+        res.status(400).json({ message: `Saving user to database went wrong, ${err}`})
+      })
+        // aNewUser.save((err, aNewUser) => {
+        //       if (err) { res.status(400).json({ message: 'Saving user to database went wrong.' }); return; }
+        // console.log(aNewUser)
               // Automatically log in user after sign up  .login() here is actually predefined passport method
-              req.login(aNewUser, (err) => {
-                  if (err) { res.status(500).json({ message: 'Login after signup went bad.' }); return; }
-                  console.log("llega hasta crear el token")
+              // req.login(aNewUser, (err) => {
+              //     if (err) { res.status(500).json({ message: 'Login after signup went bad.' }); return; }
+              //     console.log("llega hasta crear el token")
 
-                  var token = utils.generateToken(aNewUser); //<----- Generate Token
-                  theNewUser = utils.getCleanUser(aNewUser);
-                
-                  // Send the user's information to the frontend. We can use also: res.status(200).json(req.user);
-                  res.status(200).json({user: theNewUser, token:token}); // <----- Return both user and token
-                //   res.status(200).json(aNewUser); // <----- Return both user and token
+              //     var token = utils.generateToken(aNewUser); //<----- Generate Token
+              //     console.log(token)
 
-              });
-          });   
+              //     theNewUser = utils.getCleanUser(aNewUser);
+              //   console.log(theNewUser)
+              //     // Send the user's information to the frontend. We can use also: res.status(200).json(req.user);
+              //     res.status(200).json({user: theNewUser, token:token}); // <----- Return both user and token
+              //   //   res.status(200).json(aNewUser); // <----- Return both user and token
+
+              // });
+          // });   
 
   });
 });
@@ -64,9 +80,11 @@ authRoutes.post('/login', (req, res, next) => {
       req.login(theUser, (err) => {
           if (err) { res.status(500).json({ message: 'Session save went bad.' }); return; }
           // We are now logged in (that's why we can also send req.user)
+         
           var token = utils.generateToken(theUser); //<----- Generate Token
           theNewUser = utils.getCleanUser(theUser);
-          res.status(200).json({user: theNewUser, token:token});
+
+          res.status(200).json({user: theNewUser, token: token});
       });
   })(req, res, next);
 });

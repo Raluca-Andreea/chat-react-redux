@@ -33,9 +33,8 @@ constructor() {
   this.socket = new SocketConnection()
 
   this.socket.socket.on("messageSent", (obj) => {
-
     this.props.addMessage(obj)
-})
+  })
 }
 
   render() {

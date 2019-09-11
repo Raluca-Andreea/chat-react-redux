@@ -35,9 +35,17 @@ const allUsersReducer = (state=initialState, action) => {
 
     case REMOVE_USER:
     let cnUsr = [] 
+
     state.users.forEach(usr => {
-      if(usr.username.toLowerCase() !== action.payload.username.toLowerCase()) {
-       cnUsr.push(usr)
+      if(typeof action.payload === typeof usr.username) {
+        if(usr.username.toLowerCase() !== action.payload.toLowerCase()) {       
+          cnUsr.push(usr)
+         }
+      } else {
+        
+        if(usr.username.toLowerCase() !== action.payload.username.toLowerCase()) {
+          cnUsr.push(usr)
+        }
       }
     })
 

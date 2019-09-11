@@ -10,5 +10,14 @@ export default class prServices {
   }  
   
   getAllUsers = () => this.service.get('allUsers')
+
+  getPrivateChat = (room_id) => this.service.get('allMessages', { params: {id: room_id}})
+  
+  
+  getAllRooms = (user_id) => this.service.get('allRooms', { params: {id: user_id}})
+  createRoom = (userId, loggedInUser) => this.service.post('createRoom', {userId, loggedInUser})
+
+  createMessage = (message, loggedInUser_id, room_id)  => this.service.post('addMessage', {message, loggedInUser_id, room_id})
+
  
 }

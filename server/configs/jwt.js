@@ -12,6 +12,7 @@ const generateToken = user => {
   return token = jwt.sign(usr, process.env.JWT_SECRET, {
      expiresIn: 60 * 60 * 24 // expires in 24 hours
   });
+
 }
 
 const getCleanUser = user => {

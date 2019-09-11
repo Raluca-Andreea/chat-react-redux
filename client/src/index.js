@@ -19,7 +19,8 @@ import throttle from 'lodash/throttle'
 store.subscribe(throttle(() => {
   saveState({
     auth: store.getState().auth,
-    allUsers: store.getState().allUsers
+    allUsers: store.getState().allUsers,
+    privateChat: store.getState().privateChat
   })
   
 }, 1000))

@@ -5,6 +5,7 @@ import { logoutUser } from '../actions/actionCreator'
 import { bindActionCreators } from "redux"
 
 
+
 const mapStateToProps = (state) => {
   return {
     state
@@ -27,7 +28,7 @@ class Nav extends Component {
   navbarLinks() {
     if (this.props.state.auth.isAuthenticated) {
       return [
-        <div className="nav-bar"><button className="logout-btn" onClick={this.props.logoutUser}>Logout</button><span >Welcome, {this.props.state.auth.loggedInUser}</span></div>
+        <div className="nav-bar"><button className="logout-btn" onClick={() => this.props.logoutUser(this.props.state.auth.loggedInUser)}>Logout</button><span >Welcome, {this.props.state.auth.loggedInUser}</span></div>
       ];
     }
     return [

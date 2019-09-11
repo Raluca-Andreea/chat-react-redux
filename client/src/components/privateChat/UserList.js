@@ -2,12 +2,17 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import SocketConnection from  "../socketFront/websocket"
-import { getAllUsers, refreshUsers, removeUser, joinRoom } from '../../actions/actionCreator'
+import { getAllUsers, refreshUsers, removeUser, joinRoom, openPrivateChat, changeChat, getAllRooms } from '../../actions/actionCreator'
+import ChatRoom from './ChatRoom'
+import SearchBar from './SearchBar'
+
 
 const mapStateToProps = (state) => { 
   return {
     allUsers: state.allUsers.users,
-    loggedInUser: state.auth.loggedInUser
+    loggedInUser: state.auth.loggedInUser,
+    loggedInUser_ID: state.auth.loggedInUser_ID,
+    privateChat: state.privateChat
   };
 }
 
@@ -18,7 +23,10 @@ const mapDispatchToProps = (dispatch)=> {
       getAllUsers,
       refreshUsers,
       removeUser,
-      joinRoom
+      joinRoom,
+      openPrivateChat,
+      changeChat,
+      getAllRooms
     },
     dispatch
   );
@@ -45,28 +53,80 @@ class UserList extends Component {
         }     
       })
 
-       this.socket.socket.on("join", (userId) => {   
-        console.log("joined room nr" + userId)  
+       this.socket.socket.on("join_update", (room_id) => {            
+        console.log("joined room nr " + room_id)  
+        this.props.openPrivateChat(room_id)
       })
     
   }
 
+  componentDidMount() {
+    this.props.getAllRooms(this.props.loggedInUser_ID)
+  }
+
  render() {
+console.log(this.props.privateChat)
   if(this.props.allUsers) {
     return (
      
-      < >    
-          <div className="users-list">  
+      < div className="users-list-container">  
+        <div className="pr-chat-users">       
+            <SearchBar />
+            <h2>Users</h2>
+           <div className="users-list">  
               {this.props.allUsers.map(user => { 
+               
                  return user.username === this.props.loggedInUser 
                  ?
                  <li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><p>You are now online</p></li> 
                  :
-                 <div><button onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser)} key={user.username} className="user-list-button">{user.username}</button><hr></hr></div>
+                 <div><div onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID)} key={user.username} className="user-list-button">{user.username}</div><hr></hr></div>
               })}  
+           </div>
          </div>
+
+          <div className="private-chat-container">
           
-      </>  
+              
+             {this.props.privateChat.rooms.length >= 1 ? 
+                <div className="no-private-chat"><p className="tab-look-container">
+
+                {this.props.privateChat.rooms.map(room => {
+
+                  return <><input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look input-icons"></input><input id="icon"/></>
+                })}              
+                </p></div>
+                :
+                <div className="no-private-chat"><p className="tab-look-container"><button className="tab-look">No chat active</button></p></div>
+                
+             }
+             <>
+             
+              {/* {this.props.privateChat.rooms.data.privateChats.length >= 1 ?  */}
+                <>    
+                
+                {/* {this.props.privateChat.rooms.map(room => {
+                      console.log(room)
+                  if(room._id === this.props.privateChat.currentRoom && (this.props.loggedInUser === room.sender.username || this.props.privateChat.tabValue === room.reciever.username)) {
+                    // return room.message ? <ChatRoom {...room}/> : <p>Start a conversation with {room.reciever.username}</p>
+                    return <ChatRoom {...room}/> 
+                  }
+
+                  if(room._id === this.props.privateChat.currentRoom ) {
+                    // return room.message ? <ChatRoom {...room}/> : <p>Start a conversation with {room.reciever.username}</p>
+                    return <ChatRoom {...room}/> 
+                  }
+
+                })}               */}
+                </>
+                :
+                <div>Begin chat</div>                
+             }
+
+             </>
+           
+          </div>
+      </div>  
     )
   } else {
     return (

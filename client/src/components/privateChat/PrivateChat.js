@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import SearchBar from './SearchBar';
 import UserList from './UserList'
-import AllTabs from './AllTabs'
 import {Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
 import SocketConnection from  "../socketFront/websocket"
@@ -26,13 +25,8 @@ class PrivateChat extends Component {
   render() {
     if(this.props.loggedInUser) {
       return (
-        <div>
-          <div className="pr-chat-users">
-            <SearchBar />
-          <h2>Users</h2>
+        <div>        
             <UserList/>   
-          </div>
-            <AllTabs />      
         </div>
       )
     } else {

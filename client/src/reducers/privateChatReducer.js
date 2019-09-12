@@ -8,8 +8,10 @@ const initialState = {
   currentRoom: '',
   tabValue: '',
   message: "",
-  active: ""
+  active: "",
+  lastMessage: "",
   // roomMessages: [],
+  lastMessageTimestamps: ""
 }
 
 const privateChatReducer = (state=initialState, action) => {
@@ -56,38 +58,21 @@ const privateChatReducer = (state=initialState, action) => {
      [action.name]: action.value
    }
 
-  //  case ADD_PRIVATE_MESSAGE:
-  //  const messages = [...state.messages]
-
-  //  messages.push(action.payload.msg)
-  //  return {
-  //    ...state,
-  //   messages: messages,
-  //   message: "",
-  //   currentRoom: action.payload.room._id
-  //  }
-
    case GET_MESSAGES:
-   console.log(action.room)
+   
    if(action.room) {
-
      return {
        ...state,
-       messages: action.room.messages
+       messages: action.room.messages,
+       message: "",
+      //  lastMessage: action.room.messages[action.room.messages.length - 1].message,
+      //  lastMessageTimestamps: action.room.messages[action.room.messages.length - 1].createdAt
      }
    } else {
      return {
        ...state
      }
    }
-
-  //  case CHANGE_TAB_VALUE:
-  //  console.log(action.room, action.reciever)
-  //  return {
-  //    ...state,
-  //    currentRoom: action.room,
-  //    tabValue: action.reciever
-  //  }
 
     default:
     return state

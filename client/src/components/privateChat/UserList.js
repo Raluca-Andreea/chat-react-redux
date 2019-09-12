@@ -111,12 +111,10 @@ console.log(this.props.privateChat)
            {this.props.privateChat.rooms.length !== 0 ? 
              <>                 
              {this.props.privateChat.rooms.map(room => {
-               console.log("de ce intra pe aiciiii")
-              console.log(this.props.privateChat.currentRoom, room._id)
                if(this.props.privateChat.currentRoom === room._id) {
                  return <ChatRoom {...room}/> 
               } else {
-                return <p>No chats active</p>
+                return null
               }
 
 

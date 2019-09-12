@@ -7,6 +7,9 @@ import prService from '../services/private-services';
 let authService = new Service()
 let privateChatService = new prService()
 
+// import SocketConfig from '../components/socketFront/websocket'
+// let socketForLogout = new SocketConfig()
+
 //FORMS - HANDLE CHANGE
 export const handleSignupChange = (e) => (
   {
@@ -123,12 +126,13 @@ export const handleLoginSubmit = (e, username, password, history) => {
 }
 
 
-export const logoutUser = (user) => {
+export const logoutUser = (user, socket) => {
 
   return function(dispatch) {
     authService.logout()
     .then(() => {
-      dispatch(disconnectUser(user))
+      console.log(socket)
+      socket.disconnectUser(user)
       dispatch(logout()) 
     })
     .catch(err => console.log(err))

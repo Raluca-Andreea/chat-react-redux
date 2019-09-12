@@ -85,7 +85,6 @@ class ChatRoom extends Component {
  
                <input id="message" name="message" type="text" placeholder="Message" value={this.props.privateChat.message}  onChange={this.props.handleMessageInputChange} />
            </form>
-           {/* <button id="send"  className="custom-btn" onClick={ () =>this.props.submitMessage(this.props.state.globalChat.message, this.socket, this.props.state.globalChat.currentUser)}>>Send</button> */}
        </div>
        </>
     

@@ -74,15 +74,15 @@ console.log(this.props.privateChat)
       < div className="users-list-container">  
         <div className="pr-chat-users">       
             <SearchBar />
-            <h2>Users</h2>
+            <h2 className="h2-userlist">Online users</h2>
            <div className="users-list">  
               {this.props.allUsers.map(user => { 
 
                  return user.username === this.props.loggedInUser 
                  ?
-                 <li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><p>You are now online</p></li> 
+                 <><li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><li className="online-circle"></li><p>You are now online</p></li></> 
                  :
-                 <div><div onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID)} key={user.username} className="user-list-button">{user.username}</div><hr></hr></div>
+                 <div className="username-div"><div onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID)} key={user.username} className="user-list-button">{user.username}</div><li className="online-circle"></li><hr></hr></div>
               })}  
            </div>
          </div>
@@ -95,10 +95,6 @@ console.log(this.props.privateChat)
 
              {this.props.privateChat.rooms.map((room, idx, arr)=> {
              
-              //  if(idx === arr.length -1) {
-                
-              //     this.props.activateChat(room._id, room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username)
-              //  }
                return <Room key={room._id} {...room}/>
              })}              
              </p></div>

@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import {handleMessageInputChange, submitPrivateMessage, getAllMessages } from '../../actions/actionCreator'
 import SocketConnection from  "../socketFront/websocket"
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 
 const mapStateToProps = (state) => { 
@@ -32,22 +34,34 @@ class ChatRoom extends Component {
     this.mesRef = React.createRef();
     this.socket = new SocketConnection()
     this.socket.socket.on("privateMsg_update", (room_id) => {
-      console.log("imi trimite iar tot din camera " + room_id)
+      console.log(" ASCULT DIN CHAT_ROOM imi trimite iar tot din camera " + room_id)
          this.props.getAllMessages(room_id)
-          this.scrollToBottom()
+         this.scrollToBottom()
 
     })
 
   }
   componentDidMount() {
     this.props.getAllMessages(this.props.privateChat.currentRoom)
-    
-    //PROBLEMA E CA LA INCEPUT NU AM NICIUN MESAJ, DECI NU E INSTANTIAT REFUL SI IMI DA EROARE!!!
     this.scrollToBottom()
   }
+ 
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   console.log("this is component did update")
+  //   console.log(prevProps.privateChat.messages)
+  //   console.log(this.props.privateChat.messages)
+  //   // if(prevProps.privateChat.messages.length < this.props.privateChat.messages){
+  //   //    this.props.getAllMessages(this.props.privateChat.currentRoom)
+  //   // }
+  //   return 
+  // }
+ 
+ 
+
+
   scrollToBottom = () => {
-    if(this.props.privateChat.messages.length === 0) return
-		else this.mesRef.current.scrollTop = this.mesRef.current.scrollHeight;
+    if(this.props.privateChat.messages.length !== 0)
+		this.mesRef.current.scrollTop = this.mesRef.current.scrollHeight;
   }
   
   render() {
@@ -64,9 +78,24 @@ class ChatRoom extends Component {
                    {this.props.privateChat.messages.map((msg, idx) => {
                    return msg.user.username === this.props.loggedInUser ?
  
-                     <li  key={msg.createdAt} className="private-chat-sender-msg"><span className="sender-msg">{msg.message}</span></li>
+                     <>
+                     <div className="msg-flex-right">
+                          <li  key={msg.createdAt} className="private-chat-sender-msg">{msg.message}
+                          <p className="user-right">{msg.user.username}</p>
+                          </li>
+                          <div className="timestamp-left"><Moment format='LT'>{msg.createdAt}</Moment></div>                       
+                      </div>
+                      </>
                       :
-                     <li key={msg.createdAt} className="private-chat-reciever-msg"><span className="reciever-msg">{msg.message}</span></li>
+                     <> 
+                      <div className="msg-flex-left">
+                       <div className="timestamp-left"><Moment format='LT'>{msg.createdAt}</Moment></div>
+                          <li key={msg.createdAt} className="private-chat-reciever-msg">{msg.message}
+                          <p className="user-left">{msg.user.username}</p>
+                         </li>
+                         
+                       </div>
+                     </>
                  })}
                    </ul>
                    :
@@ -89,13 +118,6 @@ class ChatRoom extends Component {
    } else {
      return (
        <>
-
-
-
-
-
-
-
        <p>You have no messages with 
        {room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username}</p>
        <div className="input-private-messages">  

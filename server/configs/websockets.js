@@ -43,7 +43,10 @@ module.exports = (io) =>{
     
     socket.on('privateMsg', (obj) => {
       socket.join(obj.room_id)
+      // io.sockets.in(obj.room_id).emit('privateMsg_update', obj.room_id);
       io.in(obj.room_id).emit('privateMsg_update', obj.room_id)
+      // io.emit("new_privateMsg", obj.room_id)
+      // socket.broadcast.to(obj.room_id).emit('privateMsg_update', obj.room_id)
     })
 
     

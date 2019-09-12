@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
-import { changeChat } from '../../actions/actionCreator'
-import ChatRoom from './ChatRoom'
+import { changeChat, getAllMessages } from '../../actions/actionCreator'
+// import SocketConnection from  "../socketFront/websocket"
 
 const mapStateToProps = (state) => { 
   return {
@@ -17,20 +17,28 @@ const mapDispatchToProps = (dispatch)=> {
 
   return bindActionCreators(
     {
-      // getAllUsers,
-      // refreshUsers,
-      // removeUser,
-      // joinRoom,
-      // openPrivateChat,
-      changeChat,
-  
+      changeChat, 
+      getAllMessages
     },
     dispatch
   );
 }
 
 class Room extends Component {
-    
+
+  // constructor() {
+  //   super()
+  
+  //   this.socket = new SocketConnection()
+  //   this.socket.socket.on("new_privateMsg", (room_id) => {
+  //     console.log(" ASCULT DIN ROOM imi trimite iar tot din camera " + room_id)
+  //       //  this.props.getAllMessages(room_id)
+  //       //  this.scrollToBottom()
+
+  //   })
+
+  // }
+
   render() {
     const room = this.props
 

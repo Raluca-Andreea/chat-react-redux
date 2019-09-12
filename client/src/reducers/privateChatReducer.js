@@ -1,4 +1,4 @@
-import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS } from '../actions/actionTypes'
+import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE } from '../actions/actionTypes'
 
 
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
   currentRoom: '',
   tabValue: '',
   message: "",
+  active: ""
   // roomMessages: [],
 }
 
@@ -16,21 +17,29 @@ const privateChatReducer = (state=initialState, action) => {
   switch (action.type) {
     
    case OPEN_CHAT:
+   console.log(action.payload)
    return {
      ...state,
     currentRoom: action.payload,
    }
 
    case GET_ROOMS:
-   console.log(action.payload)
-      if(action.payload) {
+ 
+      if(action.payload.length !== 0) {
+       
         return {
           ...state,
-          rooms: action.payload
+          rooms: action.payload,
+          currentRoom: action.payload[action.payload.length -1]._id,
+          active: action.payload[action.payload.length -1]._id,
+          tabValue: ""
         }
       } else {
         return {
-          ...state
+          ...state,
+          rooms: [],
+          currentRoom: "",
+          active: ""
         }
       }
 
@@ -38,7 +47,8 @@ const privateChatReducer = (state=initialState, action) => {
    return {
      ...state,
      tabValue: action.value,
-     currentRoom: action.room
+     currentRoom: action.room,
+     active: action.room
    }
 
    case HANDLE_MESSAGE_INPUT_CHANGE: 
@@ -65,6 +75,13 @@ const privateChatReducer = (state=initialState, action) => {
      messages: action.room.messages
    }
 
+  //  case CHANGE_TAB_VALUE:
+  //  console.log(action.room, action.reciever)
+  //  return {
+  //    ...state,
+  //    currentRoom: action.room,
+  //    tabValue: action.reciever
+  //  }
 
     default:
     return state

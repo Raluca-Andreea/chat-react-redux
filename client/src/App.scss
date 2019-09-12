@@ -378,7 +378,13 @@ input{
   display: flex
   // padding-bottom: 10px;
 }
-.tab-look {
+.tab-look-active {
+  padding: 10px;
+  border: none;
+  background:green;
+}
+
+.tab-look-inactive {
   padding: 10px;
   border: none;
   background:red;

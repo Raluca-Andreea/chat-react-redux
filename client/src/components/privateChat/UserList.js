@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import SocketConnection from  "../socketFront/websocket"
-import { getAllUsers, refreshUsers, removeUser, joinRoom, openPrivateChat, changeChat, getAllRooms } from '../../actions/actionCreator'
+import { getAllUsers, refreshUsers, removeUser, joinRoom, openPrivateChat, changeChat, getAllRooms, activateChat } from '../../actions/actionCreator'
 import ChatRoom from './ChatRoom'
 import SearchBar from './SearchBar'
 import Room from './Room'
@@ -27,7 +27,8 @@ const mapDispatchToProps = (dispatch)=> {
       joinRoom,
       openPrivateChat,
       changeChat,
-      getAllRooms
+      getAllRooms,
+  
     },
     dispatch
   );
@@ -66,7 +67,7 @@ class UserList extends Component {
   }
 
  render() {
-
+console.log(this.props.privateChat)
   if(this.props.allUsers) {
     return (
      
@@ -76,7 +77,7 @@ class UserList extends Component {
             <h2>Users</h2>
            <div className="users-list">  
               {this.props.allUsers.map(user => { 
-               
+
                  return user.username === this.props.loggedInUser 
                  ?
                  <li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><p>You are now online</p></li> 
@@ -92,8 +93,12 @@ class UserList extends Component {
           {this.props.privateChat.rooms.length !== 0 ? 
              <div className="no-private-chat"><p className="tab-look-container">
 
-             {this.props.privateChat.rooms.map(room => {
-
+             {this.props.privateChat.rooms.map((room, idx, arr)=> {
+             
+              //  if(idx === arr.length -1) {
+                
+              //     this.props.activateChat(room._id, room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username)
+              //  }
                return <Room key={room._id} {...room}/>
              })}              
              </p></div>
@@ -103,20 +108,24 @@ class UserList extends Component {
           }
           <>
           
-           {this.props.privateChat.rooms.length !== 0 ? 
+           {/* {this.props.privateChat.rooms.length !== 0 ? 
              <>                 
              {this.props.privateChat.rooms.map(room => {
-         
-               if(room._id === this.props.privateChat.currentRoom && 
-                 (this.props.loggedInUser === room.sender.username || this.props.loggedInUser === room.reciever.username ) ||(this.props.privateChat.tabValue === room.reciever.username || this.props.privateChat.tabValue === room.sender.username)) {
+               console.log("de ce intra pe aiciiii")
+              if(this.props.privateChat.tabValue === room.sender.username || this.props.privateChat.tabValue === room.reciever.username ) {
                  return <ChatRoom {...room}/> 
-               }
+
+              }
+              //  if(room._id === this.props.privateChat.currentRoom && 
+              //    (this.props.loggedInUser === room.sender.username || this.props.loggedInUser === room.reciever.username ) ||(this.props.privateChat.tabValue === room.reciever.username || this.props.privateChat.tabValue === room.sender.username)) {
+              //    return <ChatRoom {...room}/> 
+              //  }
 
              })}              
              </>
              :
              <div>Begin chat</div>                
-          }
+          } */}
 
           </>
         

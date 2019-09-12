@@ -1,5 +1,5 @@
 import { HANDLE_CHANGE, HANDLE_SUBMIT, SET_USER, SUBMIT_MESSAGE, HANDLE_SIGNUP_CHANGE, HANDLE_LOGIN_CHANGE, 
-  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS } from './actionTypes'
+  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE } from './actionTypes'
 // import jwtDecode from 'jwt-decode'
 import Service from '../services/auth-services';
 import prService from '../services/private-services';
@@ -276,7 +276,7 @@ const openChat = (room_id) => (
 const getRooms = (rooms) => (
   {
     type: GET_ROOMS,
-    payload: rooms
+    payload: rooms,
   }
 )
 
@@ -326,18 +326,6 @@ export const submitPrivateMessage = (message, socket, loggedInUser_id, loggedInU
   }
   
 }
-// const privateMessage = (obj) => (
-//   {
-//     type: ADD_PRIVATE_MESSAGE,
-//     payload: obj
-//   }
-// )
-
-// export const addPrivateMessage = (obj) => {
-//   return dispatch => {
-//     dispatch(privateMessage(obj))
-//   }
-// }
 
 const getMessages = (room) => (
   {
@@ -355,6 +343,20 @@ export const getAllMessages = (room_id) => {
     })
   }
 }
+
+// const changeTabValue = (room_id, recieverName) => (
+//   {
+//     type: CHANGE_TAB_VALUE,
+//     room: room_id,
+//     reciever: recieverName
+//   }
+// )
+
+// export const activateChat = (room_id, recieverName) => {
+//   return dispatch => {
+//     dispatch(changeTabValue(room_id, recieverName))
+//   }
+// }
 
 
 //SEARCH_BAR_USERS

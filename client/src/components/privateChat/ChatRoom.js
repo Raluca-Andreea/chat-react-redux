@@ -41,9 +41,8 @@ class ChatRoom extends Component {
   }
   render() {
     const room = this.props
-console.log(this.props.privateChat)
-   if(this.props.privateChat.messages.length !== 0) {
-    
+
+   if(this.props.privateChat.messages.length !== 0) {   
      return (
     
        <div  className="private-chat">    
@@ -79,7 +78,8 @@ console.log(this.props.privateChat)
    } else {
      return (
        <>
-       <p>No chat started..</p>
+       <p>You have no messages with 
+       {room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username}</p>
        <div className="input-private-messages">  
                <form onSubmit={(e) => this.props.submitPrivateMessage(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID,this.props.loggedInUser, this.props.privateChat.currentRoom, e)}>   
  

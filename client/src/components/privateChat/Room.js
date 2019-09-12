@@ -33,13 +33,22 @@ class Room extends Component {
     
   render() {
     const room = this.props
-    return (
-     
+
+    if(this.props.privateChat.currentRoom === room._id){
+      return (    
+          <>
+            <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look-active input-icons"></input><input id="icon"/>
+          </>
+       
+      )
+    } 
+    else {
+      return (
         <>
-          <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look input-icons"></input><input id="icon"/>
-        </>
-     
-    )
+        <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look-inactive input-icons"></input><input id="icon"/>
+      </>
+      )
+    }
   }
 }
 

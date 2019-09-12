@@ -29,16 +29,27 @@ const mapDispatchToProps = (dispatch)=> {
 class ChatRoom extends Component {
   constructor() {
     super()
+    this.mesRef = React.createRef();
     this.socket = new SocketConnection()
     this.socket.socket.on("privateMsg_update", (room_id) => {
       console.log("imi trimite iar tot din camera " + room_id)
          this.props.getAllMessages(room_id)
+          this.scrollToBottom()
+
     })
 
   }
   componentDidMount() {
     this.props.getAllMessages(this.props.privateChat.currentRoom)
+    
+    //PROBLEMA E CA LA INCEPUT NU AM NICIUN MESAJ, DECI NU E INSTANTIAT REFUL SI IMI DA EROARE!!!
+    this.scrollToBottom()
   }
+  scrollToBottom = () => {
+    if(this.props.privateChat.messages.length === 0) return
+		else this.mesRef.current.scrollTop = this.mesRef.current.scrollHeight;
+  }
+  
   render() {
     const room = this.props
 
@@ -46,14 +57,14 @@ class ChatRoom extends Component {
      return (
     
        <div  className="private-chat">    
-         <div className="private-chat-window">
+         <div className="private-chat-window"ref={this.mesRef} >
              <div className="private-chat-output">
                 {this.props.privateChat.messages.length !== 0 ? 
                    <ul>
                    {this.props.privateChat.messages.map((msg, idx) => {
                    return msg.user.username === this.props.loggedInUser ?
  
-                     <li key={msg.createdAt} className="private-chat-sender-msg"><span className="sender-msg">{msg.message}</span></li>
+                     <li  key={msg.createdAt} className="private-chat-sender-msg"><span className="sender-msg">{msg.message}</span></li>
                       :
                      <li key={msg.createdAt} className="private-chat-reciever-msg"><span className="reciever-msg">{msg.message}</span></li>
                  })}
@@ -78,6 +89,13 @@ class ChatRoom extends Component {
    } else {
      return (
        <>
+
+
+
+
+
+
+
        <p>You have no messages with 
        {room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username}</p>
        <div className="input-private-messages">  
@@ -91,9 +109,7 @@ class ChatRoom extends Component {
       
      )
    }
-  //  return (
-  //    <p>Bla</p>
-  //  )
+
   }
 }
 

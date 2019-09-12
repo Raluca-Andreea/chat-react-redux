@@ -355,9 +355,10 @@ input{
 }
 
 .private-chat-window{
-  // height: 400px;
+  height: calc(100vh - 140px);
   overflow: auto;
   background: $background-color;
+  padding: 80px 0;
 }
 .private-chat-output p{
   padding: 14px 0px;

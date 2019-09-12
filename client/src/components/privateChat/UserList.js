@@ -108,14 +108,22 @@ console.log(this.props.privateChat)
           }
           <>
           
-           {/* {this.props.privateChat.rooms.length !== 0 ? 
+           {this.props.privateChat.rooms.length !== 0 ? 
              <>                 
              {this.props.privateChat.rooms.map(room => {
                console.log("de ce intra pe aiciiii")
-              if(this.props.privateChat.tabValue === room.sender.username || this.props.privateChat.tabValue === room.reciever.username ) {
+              console.log(this.props.privateChat.currentRoom, room._id)
+               if(this.props.privateChat.currentRoom === room._id) {
                  return <ChatRoom {...room}/> 
-
+              } else {
+                return <p>No chats active</p>
               }
+
+
+              // if(this.props.privateChat.tabValue === room.sender.username || this.props.privateChat.tabValue === room.reciever.username ) {
+              //    return <ChatRoom {...room}/> 
+
+              // }
               //  if(room._id === this.props.privateChat.currentRoom && 
               //    (this.props.loggedInUser === room.sender.username || this.props.loggedInUser === room.reciever.username ) ||(this.props.privateChat.tabValue === room.reciever.username || this.props.privateChat.tabValue === room.sender.username)) {
               //    return <ChatRoom {...room}/> 
@@ -125,7 +133,7 @@ console.log(this.props.privateChat)
              </>
              :
              <div>Begin chat</div>                
-          } */}
+          }
 
           </>
         

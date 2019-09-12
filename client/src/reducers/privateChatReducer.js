@@ -17,7 +17,6 @@ const privateChatReducer = (state=initialState, action) => {
   switch (action.type) {
     
    case OPEN_CHAT:
-   console.log(action.payload)
    return {
      ...state,
     currentRoom: action.payload,
@@ -70,9 +69,16 @@ const privateChatReducer = (state=initialState, action) => {
 
    case GET_MESSAGES:
    console.log(action.room)
-   return {
-     ...state,
-     messages: action.room.messages
+   if(action.room) {
+
+     return {
+       ...state,
+       messages: action.room.messages
+     }
+   } else {
+     return {
+       ...state
+     }
    }
 
   //  case CHANGE_TAB_VALUE:

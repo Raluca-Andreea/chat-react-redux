@@ -31,14 +31,12 @@ $connected: ("true": red, "false": blue);
 //   }
 // }
 
-.true {
-  background: green;
-  width: 10px;
-    height: 10px;
-}
+
 
 body {
   font: 300 .9em "Lato", sans-serif;
+  background: $private-chat-background;
+
 }
 
 .App {
@@ -46,7 +44,7 @@ body {
 }
 
 .home {
-  background: $background-color;
+  background: $private-chat-background;
   height: 100vh;
   @include flex-basic;
 
@@ -115,7 +113,7 @@ body {
 }
 
 .btn {
-  color: #666666;
+  color: rgba(250, 250, 250, 0.8);
   padding: 20px 8px;
   border: 1px solid rgba(255, 255, 255, 0.5);
   margin: auto 5px;
@@ -197,12 +195,14 @@ input{
   justify-content: flex-end;
   background: $private-chat-background;
   padding: 20px 20px;
+  color: rgb(250, 250, 250);
+
 }
 
 .nav-link {
-  color: black;
+  color: rgb(250, 250, 250);
   &:hover {
-    color: rgba(0,0,0, 0.5)
+    color: rgba(250, 250, 250, 0.5)
   }
 }
 
@@ -210,16 +210,17 @@ input{
 .logout-btn {
   margin-right: 20px;
   border: none;
-  background: $background-color;
+  background: none;
+  color: rgb(250, 250, 250);
   &:hover {
-    color: rgba(0,0,0, 0.5)
+    color: rgba(250, 250, 250, 0.5);
   }
 }
 
 //LOGIN
 
 .login-container{
-  background: $background-color;
+  background: $private-chat-background;
   height: calc(100vh - 58px);
   display: flex;
   justify-content: center;
@@ -228,19 +229,21 @@ input{
 }
 
 .login-form-container{
-  background: $background-color;
+  background: $private-chat-background;
   width: 40%;
+  color: rgb(250, 250, 250);
 }
 
 .login-input{
-  background: #575ed8;
+  background: #575ed8; 
   color: white;
+  border: none;
 }
 
 //SIGNUP
 
 .signup-container{
-  background: $background-color;
+  background: $private-chat-background;
   height: calc(100vh - 58px);
   display: flex;
   justify-content: center;
@@ -249,13 +252,15 @@ input{
 }
 
 .signup-form-container{
-  background: $background-color;
+  background: $private-chat-background;
   width: 40%;
+  color: rgb(250, 250, 250);
 }
 
 .signup-input{
   background: #575ed8;
   color: white;
+  border: none;
 }
 
 .error-auth {
@@ -272,12 +277,13 @@ input{
 //PRIVATE-CHAT
 .pr-chat-users{
  width: 20%;
-//  background-image: url('./img/private-chat-back-edit.jpg');
+//  background: $private-chat-background; 
  position: fixed;
  top: 0;
  left:0;
  height: 100vh;
  color: white;
+ border-right: .5px solid white;
 //  text-align: left;
 }
 .h2-userlist{
@@ -290,7 +296,7 @@ input{
   background: $private-chat-background;
   color: white;
   padding: 20px 0;
-  mix-blend-mode: color-burn;
+  // mix-blend-mode: color-burn;
   &::placeholder{
     font-size: 1.2em;
     color: white;
@@ -300,7 +306,7 @@ input{
 .users-list-container{
  display: flex;
  width: 100%;
- background: $private-chat-background;
+//  background: $private-chat-background;
 }
 
 .users-list{
@@ -310,7 +316,7 @@ input{
   z-index:10;
   padding-left: 20px;
   mix-blend-mode: color-burn;
-
+  // color: white;
 }
 
 .username-div{
@@ -337,38 +343,36 @@ hr {
 
 //PRIVATE-CHAT TABS
 
-.all-tabs{
-  background: red;
- 
-}
-
-.current-user-private-chat{ 
-  font-size: 1.5em;
-  color: #F7D969;
-}
-.online-circle{
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  text-align: right;
-  position: absolute;
-  right: 0;
-  margin-right:10px; 
-  background: #F7D969;
-}
+  .current-user-private-chat{ 
+    font-size: 1.5em;
+    // color: white;
+  }
+  .online-circle{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: right;
+    position: absolute;
+    right: 0;
+    margin-right:10px; 
+    background: #F7D969;
+  }
 
 .current-user-private-chat-li{
+  color: #F7D969;
   list-style-type: none;
   text-align: left;
   display: block;
   position: relative;
   margin-bottom: 60px;
+  // background: red;
 }
 
 .private-chat-container {
   margin-left: calc(100% - 80%);
   width: 100%;
+
 }
 
 .no-private-chat{
@@ -382,7 +386,7 @@ hr {
   border: 1px solid #ddd;
   box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
   border-radius: 2px;
-  background-color: lighten($private-chat-background, 4%);
+  // background-color: lighten($private-chat-background, 4%);
   
 }
 
@@ -408,25 +412,53 @@ hr {
 
 .tab-look-container{
   text-align: left;
-  background: $background-color;
+  // background: $background-color;
   display: flex
   // padding-bottom: 10px;
 }
+.tab-look {
+  padding: 10px;
+  border: none;
+  background: lighten($private-chat-background, 20%);
+  color: rgba(250, 250, 250, 0.9);
+  mix-blend-mode: screen;
+  width: 100%;
+}
+.begin-chat {
+  font-size: 8rem;
+  color: rgba(250, 250, 250, 0.1);
+  margin-top: 300px;
+}
+
 .tab-look-active {
   padding: 10px;
   border: none;
-  background:green;
+  background:#F7D969;
 }
 
 .tab-look-inactive {
   padding: 10px;
   border: none;
-  background:red;
+  background:lighten($private-chat-background, 20%);
+  color: rgba(250, 250, 250, 0.6)
 }
 
-#icon{ 
-  background-image: url("./img/header__close_button_959643.png") contain;
-  width: 40px;
+#icon-active{ 
+  background:#F7D969;
+  width: 50px;
+  border: none;
+  &::placeholder {
+    color: rgba(0,0,0, 0.9)
+  }
+}
+#icon-inactive{ 
+  background:darken(#F7D969, 20%);
+  width: 50px;
+  background:lighten($private-chat-background, 20%);
+  border: none;
+  &::placeholder {
+    color: rgba(250, 250, 250, 0.9)
+  }
 }
 .msg-flex-right{
   display: flex;

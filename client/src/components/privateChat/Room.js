@@ -45,7 +45,7 @@ class Room extends Component {
     if(this.props.privateChat.currentRoom === room._id){
       return (    
           <>
-            <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look-active input-icons"></input><input id="icon"/>
+            <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look-active input-icons"></input><input id="icon-active" type="text" placeholder="X"/>
           </>
        
       )
@@ -53,7 +53,7 @@ class Room extends Component {
     else {
       return (
         <>
-        <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look-inactive input-icons"></input><input id="icon"/>
+        <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} onClick={(e)=>this.props.changeChat(room._id, e)} className="tab-look-inactive input-icons"></input><input id="icon-inactive" type="text" placeholder="X"/>
       </>
       )
     }

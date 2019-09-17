@@ -126,7 +126,7 @@ console.log(this.props.privateChat)
              })}              
              </>
              :
-             <div>Begin chat</div>                
+             <div className="begin-chat">Begin chat</div>                
           }
 
           </>

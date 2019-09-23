@@ -33,7 +33,8 @@ export const GET_MESSAGES = 'GET_MESSAGES'
 export const GET_ROOMS = 'GET_ROOMS'
 export const CHANGE_TAB_VALUE = 'CHANGE_TAB_VALUE'
 
-
+export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'
+export const REMOVE_SOCKET = 'REMOVE_SOCKET'
 
 
 

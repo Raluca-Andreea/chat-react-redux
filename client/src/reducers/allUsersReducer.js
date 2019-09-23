@@ -1,10 +1,9 @@
 import { GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER } from '../actions/actionTypes'
 
-
 const initialState = {
   users: [],
   usersCopy: [],
-  name: ""
+  name: "",
 }
 
 const allUsersReducer = (state=initialState, action) => {
@@ -15,7 +14,7 @@ const allUsersReducer = (state=initialState, action) => {
     return {
       ...state,  
       users: action.payload.data,
-      usersCopy: action.payload.data
+      usersCopy: action.payload.data,
     }
 
     case HANDLE_SEARCH:

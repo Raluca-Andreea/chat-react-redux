@@ -34,16 +34,16 @@ class Nav extends Component {
 
   navbarLinks() {
     if (this.props.state.auth.isAuthenticated) {
-      return [
+      return (
         <div className="nav-bar"><button className="logout-btn" onClick={() => this.props.logoutUser(this.props.state.auth.loggedInUser, this.socket)}>Logout</button><span >Welcome, {this.props.state.auth.loggedInUser}</span></div>
-      ];
+        );
     }
-    return [
+    return (
       <div className="nav-bar">
         <Link className="nav-link" to={'/login'}>Login</Link>
         <Link className="nav-link" to={'/signup'}>Signup</Link>
      </div>
-    ];
+    );
   }
 
   render() {

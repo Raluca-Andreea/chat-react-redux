@@ -36,7 +36,7 @@ class Home extends Component {
       <div> 
       <div className="home">
           <Link onClick={() => this.props.getAllUsers(this.props.loggedInUser, this.socket)} className="btn" to={'/join-privateChat'}>Join Private Chat</Link>
-          <Link className="btn" to={'/join-globalChat'}>Join Global Chat</Link>     
+          {/* <Link className="btn" to={'/join-globalChat'}>Join Global Chat</Link>      */}
       </div>
       </div>
     )

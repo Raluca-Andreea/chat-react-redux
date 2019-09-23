@@ -1,5 +1,8 @@
-import { LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE, LOGOUT_USER, } from '../actions/actionTypes'
+import { LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE, LOGOUT_USER, REMOVE_SOCKET } from '../actions/actionTypes'
 import jwtDecode from 'jwt-decode';
+
+// import SocketConnection from "../components/socketFront/websocket"
+
 
 const initialState = {
   loggedInUser: null,
@@ -8,6 +11,7 @@ const initialState = {
   statusText: null,
   isAuthenticated: false,
   isAuthenticating: false,
+  // socket: null
 }
 
 
@@ -17,8 +21,8 @@ const completAuthReducer = (state=initialState, action) => {
   switch (action.type) {
     case LOGIN_USER_SUCCESS:
 
-      console.log(jwtDecode(action.payload.token)._id)
-      console.log(action.payload.data.user._id)
+      // console.log(jwtDecode(action.payload.token)._id)
+      // console.log(action.payload.data.user._id)
 
     return {
       ...state,
@@ -28,6 +32,7 @@ const completAuthReducer = (state=initialState, action) => {
       statusText: 'You have been successfully logged in.',
       isAuthenticated: true,
       isAuthenticating: false,
+      // socket: new SocketConnection()
     }
 
     case LOGIN_USER_FAILURE:
@@ -39,6 +44,7 @@ const completAuthReducer = (state=initialState, action) => {
       statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText.err.response.data.message}`,
       isAuthenticated: false,
       isAuthenticating: false,
+      // socket: null
     }
 
     case LOGOUT_USER: 
@@ -48,8 +54,15 @@ const completAuthReducer = (state=initialState, action) => {
       token: null,
       statusText: 'You have been successfully logged out.',
       isAuthenticated: false,
-      isAuthenticating: false,       
+      isAuthenticating: false, 
+      // socket: null      
     }
+
+    // case REMOVE_SOCKET:
+    // return {
+    //   ...state,
+    //   // socket: null
+    // }
 
     default:
     return state

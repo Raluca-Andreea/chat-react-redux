@@ -10,16 +10,18 @@ export default class SocketConnection{
       this.socket.emit("messageSent", {message, user})     
   }
   connectUser = (user) => {
-      this.socket.emit("connectUser", {user})
+    this.socket.open()
+    this.socket.emit("connectUser", {user})
   }
   disconnectUser = (user) => {
     this.socket.emit("disconnectUser", {user})
+    this.socket.close()
   }
   joinRoom = (room_id) => {
     this.socket.emit('join', {room_id})
   }
-  sendPrivateMsg = (room_id)    => {
-    this.socket.emit('privateMsg', {room_id})
+  sendPrivateMsg = (room_id, reciever_id)    => {
+    this.socket.emit('privateMsg', {room_id, reciever_id})
   }
   
 }

@@ -1,5 +1,5 @@
 import { HANDLE_CHANGE, HANDLE_SUBMIT, SET_USER, SUBMIT_MESSAGE, HANDLE_SIGNUP_CHANGE, HANDLE_LOGIN_CHANGE, 
-  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE } from './actionTypes'
+  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, REMOVE_SOCKET } from './actionTypes'
 // import jwtDecode from 'jwt-decode'
 import Service from '../services/auth-services';
 import prService from '../services/private-services';
@@ -131,7 +131,7 @@ export const logoutUser = (user, socket) => {
   return function(dispatch) {
     authService.logout()
     .then(() => {
-      console.log(socket)
+      // console.log(socket)
       socket.disconnectUser(user)
       dispatch(logout()) 
     })
@@ -216,11 +216,17 @@ const disconnectUser = (user) => (
     payload: user,
   }
 )
+// const removeSocket = () => (
+//   {
+//     type: REMOVE_SOCKET,
+//     // payload: user,
+//   }
+// )
 
 export const getAllUsers = (usr, socket) => {
 
   return (dispatch) => {
-    if(usr) {
+    if(usr) {    
       socket.connectUser(usr)
       privateChatService.getAllUsers() 
       .then(users => {
@@ -234,6 +240,7 @@ export const getAllUsers = (usr, socket) => {
 export const removeUser = (user) => {
   return (dispatch) => {
     dispatch(disconnectUser(user))
+    // dispatch(removeSocket())
   }
 }
 
@@ -247,16 +254,16 @@ export const refreshUsers = () => {
   }
 }
 
-export const joinRoom = (userId, socket, loggedInUser) => {
+export const joinRoom = (userId, socket, loggedInUser_id, loggedInUser) => {
   return dispatch => {
   
-    privateChatService.createRoom(userId, loggedInUser)
+    privateChatService.createRoom(userId,  loggedInUser_id)
     .then(res => {
-        console.log(res.data)
-      socket.joinRoom(res.data._id)
-      privateChatService.getAllRooms(loggedInUser) 
+     socket.joinRoom(res.data._id)
+     privateChatService.getAllRooms( loggedInUser_id) 
     .then(res => {
-      dispatch(getRooms(res.data.privateChats))
+      // console.log(userId)
+      dispatch(getRooms(res.data.privateChats, loggedInUser_id, loggedInUser))
     })   
     .catch(err => console.log(err))  
     })
@@ -277,29 +284,32 @@ const openChat = (room_id) => (
 )
 
 
-const getRooms = (rooms) => (
+const getRooms = (rooms, loggedInUser_id, username) => (
   {
     type: GET_ROOMS,
     payload: rooms,
+    loggedInUser_id: loggedInUser_id,
+    loggedInUser: username
   }
 )
 
-export const getAllRooms = (user_id) => {
+export const getAllRooms = (loggedInUser_id, loggedInUser) => {
   return (dispatch) => {
-    privateChatService.getAllRooms(user_id) 
+    privateChatService.getAllRooms(loggedInUser_id) 
     .then(res => {
-      dispatch(getRooms(res.data.privateChats))
+      dispatch(getRooms(res.data.privateChats, loggedInUser_id, loggedInUser))
     })   
     .catch(err => console.log(err))  
   }
 }
 
 
-export const changeChat = (roomId, e) => (
+export const changeChat = (roomId, e, recieverId) => (
   {
     type: CHANGE_CHAT,
     value: e.target.value,
-    room: roomId
+    room: roomId,
+    reciever: recieverId,
   }
 )
 
@@ -312,15 +322,15 @@ export const handleMessageInputChange = (e) => (
 )
 
 
-export const submitPrivateMessage = (message, socket, loggedInUser_id, loggedInUser, room_id, e) => {
+export const submitPrivateMessage = (message, socket, loggedInUser_id, loggedInUser, room_id, reciever_id, e) => {
   e.preventDefault()
   return (dispatch) => {
-//  console.log(message, loggedInUser_id, loggedInUser, room_id)
+ console.log(reciever_id)
     privateChatService.createMessage(message, loggedInUser_id, loggedInUser, room_id) 
     .then(res => {
-      console.log(res.data)
+      // console.log(reciever_id)
       // dispatch(getRooms(rooms))
-      socket.sendPrivateMsg(res.data.room._id)   
+      socket.sendPrivateMsg(res.data.room._id, reciever_id)   
       // privateChatService.getPrivateChat(res.data.room._id) 
       // .then(room => {
       //   dispatch(getMessages(room))
@@ -342,11 +352,19 @@ export const getAllMessages = (room_id) => {
   return dispatch => {
     privateChatService.getPrivateChat(room_id) 
     .then(room => {
-      console.log(room.data)
+      // console.log(room.data)
       dispatch(getMessages(room.data))
+      // dispatch(sendNotification(room.data))
     })
   }
 }
+
+const sendNotification = (room) => (
+  {
+    type: SEND_NOTIFICATION,
+    room: room
+  }
+)
 
 // const changeTabValue = (room_id, recieverName) => (
 //   {

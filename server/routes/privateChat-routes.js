@@ -8,8 +8,13 @@ const Message = require("../models/Message")
 
 privateChatRoutes.get('/allUsers', (req, res, next) => {
   User.find({connected: true})
+  .populate('messages')
+      .populate({
+        path: 'privateChats',
+        populate: { path: 'sender reciever messages' },
+    }) 
   .then(users => {
-    console.log("SE HAN ENVIADO LOS USER CONECTADOS, INCLUSO EL ULTIMO")
+    // console.log("SE HAN ENVIADO LOS USER CONECTADOS, INCLUSO EL ULTIMO", users)
     res.status(200).json(users)
   })
   .catch(err => res.status(401).json(err))
@@ -38,7 +43,7 @@ console.log(req.query.id)
     populate: { path: 'user' }
 }) 
   .then(room => {
-    console.log(room)
+    // console.log(room)
     res.status(200).json(room)
   })
   .catch(err => res.status(401).json(err))
@@ -81,7 +86,7 @@ privateChatRoutes.post('/createRoom', (req, res) => {
         .then(room => { 
           User.updateMany({_id: {$in: [room.sender, room.reciever]}}, {$push: {privateChats: room._id}}, {new:true})
           .then(users => {
-            console.log(room)
+            // console.log(room)
            res.status(200).json(room)
           })
               //  User.findByIdAndUpdate(req.body.loggedInUser, {$push: {privateChats: room._id}}, {new:true})
@@ -98,7 +103,7 @@ privateChatRoutes.post('/createRoom', (req, res) => {
             })
           })
       } else {
-        console.log(room)
+        // console.log(room)
         res.status(200).json(room)
       }
     })
@@ -122,8 +127,8 @@ privateChatRoutes.post('/addMessage', (req, res) => {
                   path: 'messages',
                   populate: { path: 'user' },
               })
+                .populate('sender reciever')
                 .then(room => {  
-                  
                      res.status(200).json({room, msg})                         
                 })
                 .catch(err => console.log("Error while updating the room", err))

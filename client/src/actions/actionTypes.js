@@ -35,7 +35,7 @@ export const CHANGE_TAB_VALUE = 'CHANGE_TAB_VALUE'
 
 export const SEND_NOTIFICATION = 'SEND_NOTIFICATION'
 export const REMOVE_SOCKET = 'REMOVE_SOCKET'
-
+export const ADD_SOCKET = 'ADD_SOCKET'
 
 
 

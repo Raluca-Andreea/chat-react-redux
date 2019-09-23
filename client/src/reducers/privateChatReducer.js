@@ -1,4 +1,4 @@
-import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION } from '../actions/actionTypes'
+import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, ADD_SOCKET } from '../actions/actionTypes'
 
 
   const initialState = {
@@ -9,7 +9,8 @@ import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAG
     message: "",
     active: "",
     notifications: [],
-    recieverId: ""
+    recieverId: "",
+    sockets: ""
   }
   
 
@@ -97,7 +98,12 @@ const privateChatReducer = (state=initialState, action) => {
        ...state
      }
    }
-
+   case ADD_SOCKET:
+   console.log(state)
+   return {
+     ...state,
+    //  sockets: state.sockets.push(action.payload)
+   }
   //  case SEND_NOTIFICATION:
   //  console.log(state)
   // //  const lastNotification = [...state.notifications]

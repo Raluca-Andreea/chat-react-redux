@@ -20,8 +20,11 @@ export default class SocketConnection{
   joinRoom = (room_id) => {
     this.socket.emit('join', {room_id})
   }
-  sendPrivateMsg = (room_id, reciever_id)    => {
-    this.socket.emit('privateMsg', {room_id, reciever_id})
+  sendPrivateMsg = (room_id, reciever_id, socket_id) => {
+    const body = {
+      room_id, reciever_id, socket_id
+    }
+    this.socket.emit('privateMsg', {body})
   }
   
 }

@@ -38,13 +38,11 @@ const mapDispatchToProps = (dispatch) => {
 
 class UserList extends Component {
 
-  constructor(props) {
-    super(props)
-    console.log(this.props)
+  constructor() {
+    super()
+  
     this.socket = new SocketConnection()
-    // this.socket = this.props.socket
     this.socket.socket.on("connectUser", (user) => {
-        // this.socket.socket.open()
         console.log("connected from HOME")
         console.log(user)
         console.log(this.socket.socket.id)
@@ -74,17 +72,13 @@ class UserList extends Component {
               
   }
             
-   componentDidMount() {  
-    //  console.log(this.props.socket)           
+   componentDidMount() {          
     this.props.getAllRooms(this.props.loggedInUser_ID, this.props.loggedInUser)
   }
   
 
-
-
   componentWillUnmount() {
     this.socket.disconnectUser(this.props.loggedInUser)
-    // this.socket.socket.disconnect()
   }
 
   render() {
@@ -129,7 +123,7 @@ class UserList extends Component {
                 <>
                   {this.props.privateChat.rooms.map(room => {
                     if (this.props.privateChat.currentRoom === room._id) {
-                      return <ChatRoom key={room._id} {...room} />
+                      return <ChatRoom key={room._id} {...room} socket={this.socket}/>
                     } else {
                       return null
                     }

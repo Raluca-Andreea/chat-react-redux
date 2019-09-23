@@ -30,11 +30,13 @@ const mapDispatchToProps = (dispatch)=> {
 
 
 class ChatRoom extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+    this.socket = this.props.socket
     this.mesRef = React.createRef();
-    this.socket = new SocketConnection()
-    this.socket.socket.on("privateMsg_update", (room_id) => {
+
+    // this.socket = new SocketConnection()
+    this.socket.socket.on("privateMsg", (room_id) => {
       console.log(" ASCULT DIN CHAT_ROOM imi trimite iar tot din camera " + room_id)
       // console.log(this.props)
          this.props.getAllMessages(room_id)
@@ -49,19 +51,11 @@ class ChatRoom extends Component {
     this.props.getAllMessages(this.props.privateChat.currentRoom)
     this.scrollToBottom()
   }
- 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   console.log("this is component did update")
-  //   console.log(prevProps.privateChat.messages)
-  //   console.log(this.props.privateChat.messages)
-  //   // if(prevProps.privateChat.messages.length < this.props.privateChat.messages){
-  //   //    this.props.getAllMessages(this.props.privateChat.currentRoom)
-  //   // }
-  //   return 
-  // }
- 
- 
 
+  getSnapshotBeforeUpdate() {
+    console.log(this.socket.socket.id)
+  }
+ 
 
   scrollToBottom = () => {
     if(this.props.privateChat.messages.length !== 0)

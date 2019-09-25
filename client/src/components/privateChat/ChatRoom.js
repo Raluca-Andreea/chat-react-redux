@@ -36,7 +36,7 @@ class ChatRoom extends Component {
     this.mesRef = React.createRef();
 
     // this.socket = new SocketConnection()
-    this.socket.socket.on("privateMsg", (room_id) => {
+    this.socket.socket.on("privateMsg_update", (room_id) => {
       console.log(" ASCULT DIN CHAT_ROOM imi trimite iar tot din camera " + room_id)
       // console.log(this.props)
          this.props.getAllMessages(room_id)
@@ -117,14 +117,14 @@ class ChatRoom extends Component {
    } else {
      return (
        <>
-       <p className="begin-chat">No messages with <br></br>
+       {/* <p className="begin-chat">No messages with <br></br>
        {room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username}</p>
        <div className="input-private-messages">  
                <form onSubmit={(e) => this.props.submitPrivateMessage(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID,this.props.loggedInUser, this.props.privateChat.currentRoom, this.props.privateChat.recieverId, e)}>   
  
                <input id="message" name="message" type="text" placeholder="Message" value={this.props.privateChat.message}  onChange={this.props.handleMessageInputChange} />
            </form>
-       </div>
+       </div> */}
        </>
     
       

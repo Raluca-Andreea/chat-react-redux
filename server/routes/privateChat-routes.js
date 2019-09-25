@@ -62,53 +62,81 @@ privateChatRoutes.get('/allRooms', (req, res) => {
       .catch(err => res.status(401).json(err))
 })
 
+// privateChatRoutes.post('/createRoom', (req, res) => {
+
+//   Room.findOne({
+//     $and : [
+//       {$or: [{ sender: req.body.loggedInUser }, { sender: req.body.userId }]},
+//       {$or: [{ reciever: req.body.loggedInUser }, { reciever: req.body.userId }]}
+//     ]
+//   })
+//   .populate('sender')
+//   .populate('reciever')
+//   .then((room) => {
+
+//     if(!room) {  
+//       Room.create({
+//         sender: new mongoose.Types.ObjectId(req.body.loggedInUser),
+//         reciever: new mongoose.Types.ObjectId(req.body.userId)
+//       })
+//       .then(room => {    
+//         Room.findById(room._id)
+//         .populate('reciever')
+//         .populate('sender')
+//         .then(room => { 
+//           User.updateMany({_id: {$in: [room.sender, room.reciever]}}, {$push: {privateChats: room._id}}, {new:true})
+//           .then(users => {
+//            res.status(200).json(room)
+//           })
+//             })
+//           })
+//       } else {
+
+//         res.status(200).json(room)
+//       }
+//     })
+//     .catch(err => res.status(401).json(err))
+// })
+
 privateChatRoutes.post('/createRoom', (req, res) => {
 
   Room.findOne({
     $and : [
       {$or: [{ sender: req.body.loggedInUser }, { sender: req.body.userId }]},
-      {$or: [{ reciever: req.body.loggedInUser }, { reciever: req.body.userId }]}
+      // {$or: [{ reciever: req.body.loggedInUser }, { reciever: req.body.userId }]}
     ]
   })
   .populate('sender')
-  .populate('reciever')
+  // .populate('reciever')
   .then((room) => {
 
     if(!room) {  
       Room.create({
         sender: new mongoose.Types.ObjectId(req.body.loggedInUser),
-        reciever: new mongoose.Types.ObjectId(req.body.userId)
+        // reciever: new mongoose.Types.ObjectId(req.body.userId)
       })
       .then(room => {    
         Room.findById(room._id)
-        .populate('reciever')
+        // .populate('reciever')
         .populate('sender')
         .then(room => { 
-          User.updateMany({_id: {$in: [room.sender, room.reciever]}}, {$push: {privateChats: room._id}}, {new:true})
-          .then(users => {
-            // console.log(room)
+          User.findByIdAndUpdate({_id: room.sender._id }, {$push: {privateChats: room._id}}, {new:true})
+          .then(user => {
+            console.log(user)
            res.status(200).json(room)
           })
-              //  User.findByIdAndUpdate(req.body.loggedInUser, {$push: {privateChats: room._id}}, {new:true})
-              //  .populate('privateChats')
-              //  .then((user) => {
-              //    console.log(user)
-                //  User.findByIdAndUpdate(room.reciever, {$push: {privateChats: room._id}}, {new:true})
-                //  .populate('privateChats')
-                //  .then(user => {
-                //   console.log(user)
-                //   res.status(200).json(room)
-                //  })
-              //  })
             })
           })
       } else {
-        // console.log(room)
+
         res.status(200).json(room)
       }
     })
     .catch(err => res.status(401).json(err))
 })
+
+
+
 
 privateChatRoutes.post('/addMessage', (req, res) => {
 

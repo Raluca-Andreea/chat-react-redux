@@ -9,7 +9,8 @@ const userSchema = new Schema({
   token: {type: String },
   connected: {type: Boolean, default: false},
   privateChats: [{ type: Schema.Types.ObjectId, ref: 'Room' }],
-  socket: String
+  socket: String,
+  notifications: [{ type: Schema.Types.ObjectId, ref: 'Room' }],
 },
 {
     timestamps: true

@@ -119,7 +119,7 @@ module.exports = (io) =>{
       });
       // console.log(obj)
       // console.log(io)
-      io.in(obj.body.room_id).emit('privateMsg', obj.body.room_id)
+      io.in(obj.body.room_id).emit('privateMsg_update', obj.body.room_id)
       // socket.to(obj.body.room_id).emit('privateMsg', obj.body.room_id)
       // io.sockets[idOfUserB].join(roomID);
       // io.sockets.in(roomID).emit('privateMsg_update', roomID)

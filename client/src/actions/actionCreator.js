@@ -1,5 +1,5 @@
 import { HANDLE_CHANGE, HANDLE_SUBMIT, SET_USER, SUBMIT_MESSAGE, HANDLE_SIGNUP_CHANGE, HANDLE_LOGIN_CHANGE, 
-  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, REMOVE_SOCKET, ADD_SOCKET } from './actionTypes'
+  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, REMOVE_SOCKET, ADD_SOCKET, GET_PRIVATE_ROOMS } from './actionTypes'
 // import jwtDecode from 'jwt-decode'
 import Service from '../services/auth-services';
 import prService from '../services/private-services';
@@ -261,20 +261,35 @@ export const refreshUsers = () => {
 //   }
 // )
 
-export const joinRoom = (userId, socket, loggedInUser_id, loggedInUser) => {
+export const joinRoom = (userId, socket, loggedInUser_id, loggedInUser, e) => {
+  e.preventDefault()
+  const value = e.target.value
+
   return dispatch => {
   
     privateChatService.createRoom(userId,  loggedInUser_id)
     .then(res => {
+     console.log(res.data)
      socket.joinRoom(res.data._id)
      privateChatService.getAllRooms( loggedInUser_id) 
-    .then(res => {
-      dispatch(getRooms(res.data.privateChats, loggedInUser_id, loggedInUser))
+    .then(res => {   
+      dispatch(getPrivateRooms(res.data.privateChats, loggedInUser_id, loggedInUser, value))
     })   
     .catch(err => console.log(err))  
     })
+    .catch(err => console.log(err))
   }
 }
+
+const getPrivateRooms = (rooms, loggedInUser_id, username, reciever) => (
+  {
+    type: GET_PRIVATE_ROOMS,
+    payload: rooms,
+    loggedInUser_id: loggedInUser_id,
+    loggedInUser: username,
+    reciever: reciever
+  }
+)
 
 export const openPrivateChat = (room_id) => {
   return dispatch => {
@@ -295,7 +310,8 @@ const getRooms = (rooms, loggedInUser_id, username) => (
     type: GET_ROOMS,
     payload: rooms,
     loggedInUser_id: loggedInUser_id,
-    loggedInUser: username
+    loggedInUser: username,
+  
   }
 )
 

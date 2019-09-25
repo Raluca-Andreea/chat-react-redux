@@ -95,9 +95,16 @@ class UserList extends Component {
                 // console.log(user)
                 return user.username === this.props.loggedInUser
                   ?
-                  <><li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><div className="online-circle"></div><p>You are now online</p></li></>
+                  <>
+                  <li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><div className="online-circle"></div><p>You are now online</p></li>
+
+                  {/* {user.notifications ? 
+                  <div key={user.username} className="username-div"><div onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID, this.props.loggedInUser)} className="user-list-button">{user.username}</div><li className="online-circle"></li><hr></hr></div> :
+                  null } */}
+
+                  </>
                   :
-                  <div key={user.username} className="username-div"><div onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID, this.props.loggedInUser)} className="user-list-button">{user.username}</div><li className="online-circle"></li><hr></hr></div>
+                  <div key={user.username} className="username-div"><input onClick={(e) => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID, this.props.loggedInUser, e)} className="user-list-button" value={user.username} type="text"></input><li className="online-circle"></li><hr></hr></div>
               })}
             </div>
           </div>

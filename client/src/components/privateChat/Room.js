@@ -32,9 +32,14 @@ class Room extends Component {
     if(this.props.privateChat.currentRoom === room._id){
       return (    
           <>
-            <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} 
-            onClick={room.reciever.username !== this.props.loggedInUser ? (e)=>this.props.changeChat(room._id, e, room.reciever._id) : (e)=>this.props.changeChat(room._id, e, room.sender._id) } 
+          <input type="text" name="tabValue" value={this.props.privateChat.tabValue} 
+            onClick={(e)=>this.props.changeChat(room._id, e, room.sender._id) } 
             className="tab-look-active input-icons"></input><input id="icon-active" type="text" placeholder="X"/>
+
+
+            {/* <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} 
+            onClick={room.reciever.username !== this.props.loggedInUser ? (e)=>this.props.changeChat(room._id, e, room.reciever._id) : (e)=>this.props.changeChat(room._id, e, room.sender._id) } 
+            className="tab-look-active input-icons"></input><input id="icon-active" type="text" placeholder="X"/> */}
           </>
        
       )
@@ -42,9 +47,14 @@ class Room extends Component {
     else {
       return (
         <>
-        <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} 
+          <input type="text" name="tabValue" value={this.props.privateChat.tabValue} 
+            onClick={(e)=>this.props.changeChat(room._id, e, room.sender._id) } 
+            className="tab-look-active input-icons"></input><input id="icon-active" type="text" placeholder="X"/>
+
+
+        {/* <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} 
         onClick={room.reciever._id !== this.props.loggedInUser_ID ? (e)=>this.props.changeChat(room._id, e, room.reciever._id) : (e)=>this.props.changeChat(room._id, e, room.sender._id)} 
-        className="tab-look-inactive input-icons"></input><input id="icon-inactive" type="text" placeholder="X"/>
+        className="tab-look-inactive input-icons"></input><input id="icon-inactive" type="text" placeholder="X"/> */}
       </>
       )
     }

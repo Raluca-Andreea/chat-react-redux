@@ -1,4 +1,4 @@
-import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, ADD_SOCKET } from '../actions/actionTypes'
+import { OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, ADD_SOCKET, GET_PRIVATE_ROOMS } from '../actions/actionTypes'
 
 
   const initialState = {
@@ -27,22 +27,23 @@ const privateChatReducer = (state=initialState, action) => {
    case GET_ROOMS:
 
    if(action.payload.length !== 0) {      
-          let recieverId = ""
-          action.payload.forEach(room => {
-            room.reciever._id !== action.loggedInUser_id ? recieverId = room.reciever._id : recieverId = room.sender._id
-          })
-          let recieverName = ""
-          action.payload.forEach(room => {
-          room.reciever.username !== action.loggedInUser ? recieverName = room.reciever.username : recieverName = room.sender.username
-          })
+          // let recieverId = ""
+          // action.payload.forEach(room => {
+          //   room.reciever._id !== action.loggedInUser_id ? recieverId = room.reciever._id : recieverId = room.sender._id
+          // })
+          // let recieverName = ""
+          // action.payload.forEach(room => {
+          // room.reciever.username !== action.loggedInUser ? recieverName = room.reciever.username : recieverName = room.sender.username
+          // })
         
         return {
           ...state,
           rooms: action.payload,
           currentRoom: action.payload[action.payload.length -1]._id,
           active: action.payload[action.payload.length -1]._id,
-          recieverId: recieverId,
-          tabValue: recieverName
+          // recieverId: recieverId,
+          // tabValue: recieverName
+          // tabValue: 
         }
       } else {
         return {
@@ -54,6 +55,38 @@ const privateChatReducer = (state=initialState, action) => {
           tabValue: ""
         }
       }
+
+  case GET_PRIVATE_ROOMS:
+      if(action.payload.length !== 0) {      
+        // let recieverId = ""
+        // action.payload.forEach(room => {
+        //   room.reciever._id !== action.loggedInUser_id ? recieverId = room.reciever._id : recieverId = room.sender._id
+        // })
+        // let recieverName = ""
+        // action.payload.forEach(room => {
+        // room.reciever.username !== action.loggedInUser ? recieverName = room.reciever.username : recieverName = room.sender.username
+        // })
+      
+      return {
+        ...state,
+        rooms: action.payload,
+        currentRoom: action.payload[action.payload.length -1]._id,
+        active: action.payload[action.payload.length -1]._id,
+        // recieverId: recieverId,
+        // tabValue: recieverName
+        tabValue: action.reciever
+      }
+    } else {
+      return {
+        ...state,
+        rooms: [],
+        currentRoom: "",
+        active: "",
+        recieverId: "",
+        tabValue: ""
+      }
+    }
+
 
    case CHANGE_CHAT:
 

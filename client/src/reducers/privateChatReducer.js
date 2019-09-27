@@ -11,7 +11,8 @@ const initialState = {
   active: "",
   notifications: [],
   recieverId: "",
-  sockets: ""
+  sockets: "",
+  lastActiveRoom: ''
 }
 
 
@@ -42,6 +43,7 @@ const privateChatReducer = (state = initialState, action) => {
           rooms: action.payload,
           currentRoom: action.payload[action.payload.length - 1]._id,
           active: action.payload[action.payload.length - 1]._id,
+          lastActiveRoom: action.payload[action.payload.length - 1]._id,
           recieverId: recieverId,
           tabValue: recieverName
         }
@@ -51,6 +53,7 @@ const privateChatReducer = (state = initialState, action) => {
           rooms: [],
           currentRoom: "",
           active: "",
+          lastActiveRoom: '',
           recieverId: "",
           tabValue: ""
         }
@@ -91,7 +94,6 @@ const privateChatReducer = (state = initialState, action) => {
 
 
     case CHANGE_CHAT:
-
       return {
         ...state,
         tabValue: action.value,
@@ -100,6 +102,7 @@ const privateChatReducer = (state = initialState, action) => {
         recieverId: action.reciever
       }
 
+      
     case HANDLE_MESSAGE_INPUT_CHANGE:
       return {
         ...state,

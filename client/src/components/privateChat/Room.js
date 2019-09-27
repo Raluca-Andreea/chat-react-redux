@@ -28,12 +28,12 @@ class Room extends Component {
 
   render() {
     const room = this.props
-
+    console.log(this.props.privateChat)
     if(this.props.privateChat.currentRoom === room._id){
       return (    
           <>
           <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} 
-            onClick={room.reciever.username !== this.props.loggedInUser ? (e)=>this.props.changeChat(room._id, e, room.reciever._id, this.props.socket) : (e)=>this.props.changeChat(room._id, e, room.sender._id, this.props.socket) } 
+            onClick={room.reciever.username !== this.props.loggedInUser ? (e)=>this.props.changeChat(room._id, e, room.reciever._id, this.props.socket, this.props.privateChat.currentRoom) : (e)=>this.props.changeChat(room._id, e, room.sender._id, this.props.socket, this.props.privateChat.currentRoom) } 
             className="tab-look-active input-icons"></input><input id="icon-active" type="text" placeholder="X"/>
           </>
        
@@ -43,7 +43,7 @@ class Room extends Component {
       return (
         <>
         <input type="text" name="tabValue" value={room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username} 
-        onClick={room.reciever._id !== this.props.loggedInUser_ID ? (e)=>this.props.changeChat(room._id, e, room.reciever._id, this.props.socket) : (e)=>this.props.changeChat(room._id, e, room.sender._id, this.props.socket)} 
+        onClick={room.reciever._id !== this.props.loggedInUser_ID ? (e)=>this.props.changeChat(room._id, e, room.reciever._id, this.props.socket, this.props.privateChat.currentRoom) : (e)=>this.props.changeChat(room._id, e, room.sender._id, this.props.socket, this.props.privateChat.currentRoom)} 
         className="tab-look-inactive input-icons"></input><input id="icon-inactive" type="text" placeholder="X"/>
       </>
       )

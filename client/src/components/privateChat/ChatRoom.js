@@ -40,7 +40,12 @@ class ChatRoom extends Component {
     this.socket.socket.on("privateMsg_update", (room_id) => {
       console.log(" ASCULT DIN CHAT_ROOM imi trimite iar tot din camera " + room_id)
       // console.log(this.props)
-         this.props.getAllMessages(room_id)
+      console.log(room_id)
+      console.log(this.props.privateChat)
+      if(room_id === this.props.privateChat.currentRoom) {
+
+        this.props.getAllMessages(room_id)
+      }
           // this.props.getAllRooms(this.props.loggedInUser_ID)
       // this.typing = React.createRef()
         //  this.scrollToBottom()

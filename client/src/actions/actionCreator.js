@@ -312,8 +312,10 @@ export const getAllRooms = (loggedInUser_id, loggedInUser) => {
   }
 }
 
-export const changeChat = (roomId, e, recieverId, socket) => {
+export const changeChat = (roomId, e, recieverId, socket, currentRoom) => {
   return dispatch => {
+    // console.log(currentRoom, roomId)
+    socket.leaveRoom(currentRoom)
     socket.joinRoom(roomId)
     dispatch(changeTabChat(roomId, e, recieverId))
   }

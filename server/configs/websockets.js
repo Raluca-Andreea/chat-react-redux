@@ -61,17 +61,23 @@ module.exports = (io) =>{
     })
 
     socket.on('join', (obj) => { 
-      console.log(obj)
+      // console.log(obj)
       socket.join(obj.room_id) 
       // console.log(io.sockets.adapter.rooms)
 
     })
 
     socket.on('joinSecondUser', (obj) => {
-      console.log(obj)
+      // console.log(obj)
       socket.join(obj.room_id)
       // console.log(io.sockets.adapter.rooms)
       socket.emit('joinSecondUser', obj.room_id)
+    })
+
+    socket.on('leaveRoom', (obj) => {
+      socket.leave(obj.room_id)
+      // console.log("HAS LEFT THE ROOM")
+      // console.log(obj)
     })
 
     socket.on('notification', (obj) => {

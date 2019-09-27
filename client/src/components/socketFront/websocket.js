@@ -35,5 +35,8 @@ export default class SocketConnection{
   joinSecondUser = (room_id) => {
     this.socket.emit('joinSecondUser', {room_id})
   }
+  leaveRoom = (room_id) => {
+    this.socket.emit('leaveRoom', {room_id})
+  }
 }
 

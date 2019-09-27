@@ -26,6 +26,14 @@ export default class SocketConnection{
     }
     this.socket.emit('privateMsg', {body})
   }
-  
+  sendNotification = (room_id, reciever_id) => {
+    const object = {
+      room_id, reciever_id
+    }
+    this.socket.emit('notification', {object})
+  }
+  joinSecondUser = (room_id) => {
+    this.socket.emit('joinSecondUser', {room_id})
+  }
 }
 

@@ -3,7 +3,7 @@ const Message = require("../models/Message")
 const Room = require("../models/Room")
 const mongoose = require('mongoose');
 
-
+const userSockets = []
 module.exports = (io) =>{
   console.log("Hoy conexion con sockets")
 
@@ -26,12 +26,10 @@ module.exports = (io) =>{
     // })
 
     socket.on("connectUser", (user)=> {
-
       User.findOneAndUpdate({username: user.user},{ $set: { connected: true, socket: socket.id } }, {new: true})
       .then(user => {
         console.log("SE HA CONECTADO " + user)
-        console.log(user)
-        socket.username = user.username
+
         // const obj = {user, socket_id: socket.id}
         io.emit("connectUser", {user})     
       })
@@ -54,7 +52,7 @@ module.exports = (io) =>{
       User.findOneAndUpdate({username: user.user},{ $set: { connected: false, socket: "" }}, {new: true})
       .then(user => {
         console.log("SE HA DESCONECTADO " + user)
-        console.log(socket.id)
+       
         io.emit("disconnectUser", user)  
         socket.conn.close()
       })
@@ -63,20 +61,33 @@ module.exports = (io) =>{
     })
 
     socket.on('join', (obj) => { 
-      // console.log("room1") 
-      console.log(obj.room_id)
+      console.log(obj)
       socket.join(obj.room_id) 
-      // console.log(socket.id)  
-      // console.log(obj)  
-      // console.log(socket.adapter.rooms)
-      // io.of('/').clients((error, clients) => {
-      //   if (error) throw error;
-      //   console.log(clients); // => [Anw2LatarvGVVXEIAAAD]
-      // });
+      // console.log(io.sockets.adapter.rooms)
 
-      
-      // io.emit('join', obj)   
-      // io.in(obj.room_id).emit('join_update', obj.room_id)
+    })
+
+    socket.on('joinSecondUser', (obj) => {
+      console.log(obj)
+      socket.join(obj.room_id)
+      // console.log(io.sockets.adapter.rooms)
+      socket.emit('joinSecondUser', obj.room_id)
+    })
+
+    socket.on('notification', (obj) => {
+      User.findById(obj.object.reciever_id)
+      .populate({
+        path: 'notifications',
+        populate: { path: 'messages sender reciever' },
+      })
+     .then(user => {
+        let found 
+        if(user.notifications) {
+          found = user.notifications.find(room => room._id.toString() === obj.object.room_id)
+        }
+        socket.broadcast.emit('notification', {found})   
+      })
+      .catch(err => console.log('no user found ' + err))
     })
     
     socket.on('privateMsg', (obj) => {
@@ -85,6 +96,7 @@ module.exports = (io) =>{
       //   console.log(room)
       //   console.log(obj.body.room_id)
       // })
+      // console.log(io.sockets.adapter.rooms)
 
       // let idOfUserB = obj.body.reciever_id
       // let roomID = idOfUserB + '_' + socket.id; // create a unique room id
@@ -110,6 +122,7 @@ module.exports = (io) =>{
       // })
       // .catch(err => console.log(err))
 
+      // console.log(io.sockets.connected)
 
       // socket.join(obj.body.room_id)
       
@@ -117,8 +130,9 @@ module.exports = (io) =>{
         if (error) throw error;
         console.log(clients); // => [Anw2LatarvGVVXEIAAAD]
       });
-      // console.log(obj)
+      // console.log(obj.body.room_id)
       // console.log(io)
+      // console.log(obj)
       io.in(obj.body.room_id).emit('privateMsg_update', obj.body.room_id)
       // socket.to(obj.body.room_id).emit('privateMsg', obj.body.room_id)
       // io.sockets[idOfUserB].join(roomID);

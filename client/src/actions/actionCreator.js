@@ -1,5 +1,5 @@
 import { HANDLE_CHANGE, HANDLE_SUBMIT, SET_USER, SUBMIT_MESSAGE, HANDLE_SIGNUP_CHANGE, HANDLE_LOGIN_CHANGE, 
-  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, REMOVE_SOCKET, ADD_SOCKET, GET_PRIVATE_ROOMS } from './actionTypes'
+  LOGIN_USER_FAILURE, LOGIN_USER_SUCCESS, LOGOUT_USER, GET_ALL_USERS, HANDLE_SEARCH, FILTER_USERS, REMOVE_USER, OPEN_CHAT, CHANGE_CHAT, HANDLE_MESSAGE_INPUT_CHANGE, ADD_PRIVATE_MESSAGE, GET_MESSAGES, GET_ROOMS, CHANGE_TAB_VALUE, SEND_NOTIFICATION, REMOVE_SOCKET, ADD_SOCKET, GET_PRIVATE_ROOMS, SHOW_NOTIFICATION, REMOVE_NOTIFICATION, OPEN_ROOM } from './actionTypes'
 // import jwtDecode from 'jwt-decode'
 import Service from '../services/auth-services';
 import prService from '../services/private-services';
@@ -261,35 +261,22 @@ export const refreshUsers = () => {
 //   }
 // )
 
-export const joinRoom = (userId, socket, loggedInUser_id, loggedInUser, e) => {
-  e.preventDefault()
-  const value = e.target.value
+export const joinRoom = (userId, socket, loggedInUser_id, loggedInUser) => {
 
   return dispatch => {
   
     privateChatService.createRoom(userId,  loggedInUser_id)
     .then(res => {
-     console.log(res.data)
      socket.joinRoom(res.data._id)
      privateChatService.getAllRooms( loggedInUser_id) 
     .then(res => {   
-      dispatch(getPrivateRooms(res.data.privateChats, loggedInUser_id, loggedInUser, value))
+      dispatch(getRooms(res.data.privateChats, loggedInUser_id, loggedInUser))
     })   
     .catch(err => console.log(err))  
     })
     .catch(err => console.log(err))
   }
 }
-
-const getPrivateRooms = (rooms, loggedInUser_id, username, reciever) => (
-  {
-    type: GET_PRIVATE_ROOMS,
-    payload: rooms,
-    loggedInUser_id: loggedInUser_id,
-    loggedInUser: username,
-    reciever: reciever
-  }
-)
 
 export const openPrivateChat = (room_id) => {
   return dispatch => {
@@ -325,8 +312,15 @@ export const getAllRooms = (loggedInUser_id, loggedInUser) => {
   }
 }
 
+export const changeChat = (roomId, e, recieverId, socket) => {
+  return dispatch => {
+    socket.joinRoom(roomId)
+    dispatch(changeTabChat(roomId, e, recieverId))
+  }
+}
 
-export const changeChat = (roomId, e, recieverId) => (
+
+const changeTabChat = (roomId, e, recieverId) => (
   {
     type: CHANGE_CHAT,
     value: e.target.value,
@@ -362,6 +356,69 @@ export const submitPrivateMessage = (message, socket, loggedInUser_id, loggedInU
   
 }
 
+export const sendNotification = (message, socket, loggedInUser_id, loggedInUser, room_id, reciever_id, e) => {
+  e.preventDefault()
+ 
+  return (dispatch) => {
+    privateChatService.createMessage(message, loggedInUser_id, loggedInUser, room_id) 
+    .then(res => {
+      console.log(res.data.room)
+      console.log(reciever_id, loggedInUser_id)
+      privateChatService.createNotification(res.data.room, res.data.room.reciever._id)
+      .then(res => {
+        socket.sendPrivateMsg(room_id, reciever_id, socket.socket.id)   
+        socket.sendNotification(room_id, reciever_id)
+      })
+    })   
+    .catch(err => console.log(err))  
+  } 
+}
+
+export const showAllNotifications = (user_id) => {
+  return dispatch  => {
+    privateChatService.showAllNotifications(user_id)
+    .then(res => {
+      dispatch(showNotification(res.data.notifications))
+    })
+    .catch(err => console.log(err))
+  }
+}
+
+
+const showNotification = (rooms) => (
+  {
+    type: SHOW_NOTIFICATION,
+    payload: rooms
+  }
+)
+
+export const clearNotifications = (room_id, socket, loggedInUser_ID,loggedInUser) => {
+  return dispatch => {
+    privateChatService.deleteNotification(room_id, loggedInUser_ID)
+    .then(res => {
+      socket.joinSecondUser(room_id)
+      dispatch(clearNotification(res.data.notifications))
+    })
+    .catch(err => console.log(err))
+  }
+}
+
+// export const openRoom = (room_id) => (
+//   {
+//     type: OPEN_ROOM,
+//     payload: room_id
+//   }
+// )
+
+
+const clearNotification = (rooms) => (
+  {
+    type: REMOVE_NOTIFICATION,
+    payload: rooms
+  }
+)
+
+
 const getMessages = (room) => (
   {
     type: GET_MESSAGES,
@@ -380,12 +437,6 @@ export const getAllMessages = (room_id) => {
   }
 }
 
-const sendNotification = (room) => (
-  {
-    type: SEND_NOTIFICATION,
-    room: room
-  }
-)
 
 // const changeTabValue = (room_id, recieverName) => (
 //   {

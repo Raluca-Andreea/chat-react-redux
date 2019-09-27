@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
-import {handleMessageInputChange, submitPrivateMessage, getAllMessages } from '../../actions/actionCreator'
+import {handleMessageInputChange, submitPrivateMessage, getAllMessages, sendNotification } from '../../actions/actionCreator'
 import SocketConnection from  "../socketFront/websocket"
 import Moment from 'react-moment';
 import 'moment-timezone';
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch)=> {
       handleMessageInputChange,
       submitPrivateMessage,
       getAllMessages,
-     
+      sendNotification
     },
     dispatch
   );
@@ -34,6 +34,7 @@ class ChatRoom extends Component {
     super(props)
     this.socket = this.props.socket
     this.mesRef = React.createRef();
+    // this.typing = undefined
 
     // this.socket = new SocketConnection()
     this.socket.socket.on("privateMsg_update", (room_id) => {
@@ -41,15 +42,15 @@ class ChatRoom extends Component {
       // console.log(this.props)
          this.props.getAllMessages(room_id)
           // this.props.getAllRooms(this.props.loggedInUser_ID)
-
-         this.scrollToBottom()
+      // this.typing = React.createRef()
+        //  this.scrollToBottom()
 
     })
 
   }
   componentDidMount() {
     this.props.getAllMessages(this.props.privateChat.currentRoom)
-    this.scrollToBottom()
+    // this.scrollToBottom()
   }
 
   getSnapshotBeforeUpdate() {
@@ -117,14 +118,16 @@ class ChatRoom extends Component {
    } else {
      return (
        <>
-       {/* <p className="begin-chat">No messages with <br></br>
+       <p className="begin-chat">No messages with<br></br>
        {room.reciever.username !== this.props.loggedInUser ? room.reciever.username : room.sender.username}</p>
+
        <div className="input-private-messages">  
-               <form onSubmit={(e) => this.props.submitPrivateMessage(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID,this.props.loggedInUser, this.props.privateChat.currentRoom, this.props.privateChat.recieverId, e)}>   
+
+               <form onSubmit={(e) => this.props.sendNotification(this.props.privateChat.message, this.socket, this.props.loggedInUser_ID,this.props.loggedInUser, this.props.privateChat.currentRoom, this.props.privateChat.recieverId, e)}> 
  
                <input id="message" name="message" type="text" placeholder="Message" value={this.props.privateChat.message}  onChange={this.props.handleMessageInputChange} />
            </form>
-       </div> */}
+       </div>
        </>
     
       

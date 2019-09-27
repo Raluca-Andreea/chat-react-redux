@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import SocketConnection from "../socketFront/websocket"
-import { getAllUsers, refreshUsers, removeUser, joinRoom, openPrivateChat, changeChat, getAllRooms, activateChat } from '../../actions/actionCreator'
+import { getAllUsers, refreshUsers, removeUser, joinRoom, openPrivateChat, changeChat, getAllRooms, activateChat, showAllNotifications, clearNotifications} from '../../actions/actionCreator'
 import ChatRoom from './ChatRoom'
 import SearchBar from './SearchBar'
 import Room from './Room'
@@ -29,7 +29,9 @@ const mapDispatchToProps = (dispatch) => {
       openPrivateChat,
       changeChat,
       getAllRooms,
-
+      showAllNotifications,
+      clearNotifications,
+      
     },
     dispatch
   );
@@ -55,8 +57,21 @@ class UserList extends Component {
             console.log(user)
             console.log(this.socket.socket.id)
             this.props.removeUser(user)
-            // this.socket.socket.disconnect()
           }
+    })
+
+    this.socket.socket.on("notification", (room) => { 
+      if(this.props.loggedInUser === room.found.reciever.username) {
+        console.log("GOT A NOTIFICATION")
+        this.props.showAllNotifications(room.found.reciever._id)          
+      }    
+  })
+
+    this.socket.socket.on('joinSecondUser', (obj) => {
+      // console.log(obj)
+      // this.props.openRoom(obj)
+    this.props.getAllRooms(this.props.loggedInUser_ID, this.props.loggedInUser)
+
     })
           
     // this.socket.socket.on("join_update", (room_id) => {            
@@ -74,6 +89,7 @@ class UserList extends Component {
             
    componentDidMount() {          
     this.props.getAllRooms(this.props.loggedInUser_ID, this.props.loggedInUser)
+    this.props.showAllNotifications(this.props.loggedInUser_ID)
   }
   
 
@@ -82,7 +98,7 @@ class UserList extends Component {
   }
 
   render() {
-    // console.log(this.props.privateChat)
+    console.log(this.props.privateChat)
     if (this.props.allUsers) {
       return (
 
@@ -90,18 +106,27 @@ class UserList extends Component {
           <div className="pr-chat-users">
             <SearchBar />
             <h2 className="h2-userlist">Online users</h2>
+
+            {this.props.privateChat.notifications.length !== 0 ?
+                
+                  this.props.privateChat.notifications.map(room => {
+                
+                    return <>
+                    <div key={room._id} className="username-div"> 
+                      <div onClick={() => this.props.clearNotifications(room._id, this.socket, this.props.loggedInUser_ID, this.props.loggedInUser)} className="user-list-button">{room.sender.username}</div>
+                      <li className="online-circle"></li><hr></hr>
+                    </div> </> 
+                  }) 
+                  : <p>You have no new messages</p>
+                  }
+
             <div className="users-list">
               {this.props.allUsers.map(user => {
-                // console.log(user)
+               
                 return user.username === this.props.loggedInUser
                   ?
                   <>
                   <li className="current-user-private-chat-li" key={user.username}><span className="current-user-private-chat">{user.username}</span><div className="online-circle"></div><p>You are now online</p></li>
-
-                  {/* {user.notifications ? 
-                  <div key={user.username} className="username-div"><div onClick={() => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID, this.props.loggedInUser)} className="user-list-button">{user.username}</div><li className="online-circle"></li><hr></hr></div> :
-                  null } */}
-
                   </>
                   :
                   <div key={user.username} className="username-div"><input onClick={(e) => this.props.joinRoom(user._id, this.socket, this.props.loggedInUser_ID, this.props.loggedInUser, e)} className="user-list-button" value={user.username} type="text"></input><li className="online-circle"></li><hr></hr></div>
@@ -110,14 +135,16 @@ class UserList extends Component {
           </div>
 
           <div className="private-chat-container">
-
-
+      
             {this.props.privateChat.rooms.length !== 0 ?
               <div className="no-private-chat"><p className="tab-look-container">
 
                 {this.props.privateChat.rooms.map((room, idx, arr) => {
-
-                  return <Room key={room._id} {...room} />
+                  
+                      if(room.sender._id === this.props.loggedInUser_ID && room.messages.length === 0) return <Room key={room._id} {...room} socket={this.socket}/>
+                      else if(room.messages.length !== 0) return <Room key={room._id} {...room} socket={this.socket}/>
+                      else return <div className="no-private-chat"><p className="tab-look-container"><button className="tab-look">No chat active</button></p></div>
+                  // return <Room key={room._id} {...room} />
                 })}
               </p></div>
               :
@@ -129,11 +156,16 @@ class UserList extends Component {
               {this.props.privateChat.rooms.length !== 0 ?
                 <>
                   {this.props.privateChat.rooms.map(room => {
-                    if (this.props.privateChat.currentRoom === room._id) {
+                    if (this.props.privateChat.currentRoom === room._id && room.sender._id === this.props.loggedInUser_ID) {
                       return <ChatRoom key={room._id} {...room} socket={this.socket}/>
-                    } else {
-                      return null
                     }
+                    else if(this.props.privateChat.currentRoom === room._id && room.messages.length !== 0) {
+                      return <ChatRoom key={room._id} {...room} socket={this.socket}/>
+                    
+                    } 
+                    // else {
+                    //   return <div className="begin-chat">Begin chat</div>
+                    // }
 
 
                     // if(this.props.privateChat.tabValue === room.sender.username || this.props.privateChat.tabValue === room.reciever.username ) {

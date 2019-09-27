@@ -19,5 +19,10 @@ export default class prServices {
 
   createMessage = (message, loggedInUser_id, loggedInUser, room_id)  => this.service.post('addMessage', {message, loggedInUser_id,loggedInUser, room_id})
 
+  openPrivateRoom = (room_id) => this.service.post('openPrivateRoom', {room_id})
+  createNotification = (room, user_id) => this.service.post('createNotification', {room, user_id})
+  
+  showAllNotifications = (user_id) => this.service.get('showAllNotifications', { params: {id: user_id}})
+  deleteNotification = (room_id, loggedInUser_id) => this.service.post('deleteNotification', {room_id, loggedInUser_id})
  
 }

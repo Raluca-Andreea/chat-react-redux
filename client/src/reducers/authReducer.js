@@ -8,7 +8,7 @@ const initialState = {
   loggedInUser: null,
   loggedInUser_ID: null,
   token: null,
-  statusText: null,
+  statusText: '',
   isAuthenticated: false,
   isAuthenticating: false,
   // socket: null
